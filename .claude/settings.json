@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx prisma:*)",
+      "Bash(npm install:*)",
+      "Bash(grep -n \"href=\"\"/admin\"\"\" /Users/facundoarteagasola/Documents/penalva/app/page.tsx /Users/facundoarteagasola/Documents/penalva/app/nosotros/page.tsx /Users/facundoarteagasola/Documents/penalva/app/tasacion/page.tsx /Users/facundoarteagasola/Documents/penalva/app/propiedad/[id]/page.tsx)",
+      "Bash(node -e \":*)",
+      "Bash(npx tsc:*)",
+      "Bash(grep -v \"^$\")",
+      "Bash(for f:*)",
+      "Bash(do)",
+      "Bash(sed -i '' 's|<a href=\"\"/tasacion\"\" className=\"\"px-5 py-3 hover:text-white transition-colors\"\">Tasación</a>\\\\n              <span className=\"\"w-px h-3.5 bg-white/25\"\" />\\\\n              <a href=\"\"#contacto\"\"|<a href=\"\"/tasacion\"\" className=\"\"px-5 py-3 hover:text-white transition-colors\"\">Tasación</a>\\\\n              <span className=\"\"w-px h-3.5 bg-white/25\"\" />\\\\n              <a href=\"\"/mapa\"\" className=\"\"px-5 py-3 hover:text-white transition-colors\"\">Mapa</a>\\\\n              <span className=\"\"w-px h-3.5 bg-white/25\"\" />\\\\n              <a href=\"\"#contacto\"\"|g' \"$f\")",
+      "Bash(done)",
+      "Bash(python3 -c \":*)"
+    ],
+    "additionalDirectories": [
+      "/Users/facundoarteagasola/.claude/projects/-Users-facundoarteagasola-Documents-penalva",
+      "/Users/facundoarteagasola/Documents/penalva/app/admin/propiedades",
+      "/Users/facundoarteagasola/Documents/penalva/app/propiedad/[id]"
+    ]
+  }
+}

@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model OperationType {
+  id    String @id @default(uuid())
+  name  String @unique
+  order Int    @default(0)
+}
+
+model City {
+  id    String @id @default(uuid())
+  name  String @unique
+  order Int    @default(0)
+}
+
+model PropertyType {
+  id    String @id @default(uuid())
+  name  String @unique
+  order Int    @default(0)
+}
+
+model Property {
+  id           String   @id @default(uuid())
+  title        String
+  description  String
+  price        Float
+  city         String
+  address      String
+  lat          Float?
+  lng          Float?
+  imageUrl     String?
+  images       String?  // JSON array of additional image URLs
+  videoUrl     String?  // YouTube or Vimeo embed URL
+  type         String   // "Venta" or "Alquiler"
+  propertyType String   // "Casa", "Departamento", "Terreno", etc.
+  bedrooms     Int?
+  bathrooms    Int?
+  hasGarage    Boolean  @default(false)
+  garages      Int?
+  coveredArea  Float?
+  totalArea    Float?
+  featured     Boolean  @default(false)
+  published    Boolean  @default(true)
+  createdAt    DateTime @default(now())
+}
