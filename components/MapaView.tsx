@@ -50,7 +50,7 @@ export default function MapaView({ properties, operations, cities, propertyTypes
   const hasFilters = !!(ciudad || tipo || operacion || dormitorios);
 
   return (
-    <div className="flex flex-col flex-1 overflow-hidden">
+    <div className="flex flex-col flex-1">
 
       {/* Barra buscador */}
       <div className="shrink-0 bg-white border-b border-gray-200 px-6 py-5">
@@ -111,7 +111,7 @@ export default function MapaView({ properties, operations, cities, propertyTypes
       </div>
 
       {/* Mapa full */}
-      <div className="flex-1 isolate">
+      <div className="h-[70vh] min-h-[500px] isolate">
         <MapLoader properties={properties} fullHeight />
       </div>
     </div>

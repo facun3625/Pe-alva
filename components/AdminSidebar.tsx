@@ -13,6 +13,7 @@ import {
   ChevronRight,
   SlidersHorizontal,
   ExternalLink,
+  BarChart3,
 } from "lucide-react";
 
 const NAV = [
@@ -23,6 +24,7 @@ const NAV = [
       { label: "Propiedades", href: "/admin/propiedades", icon: Building2 },
       { label: "Nueva propiedad", href: "/admin/nueva", icon: Plus },
       { label: "Opciones", href: "/admin/opciones", icon: SlidersHorizontal },
+      { label: "Estadísticas", href: "/admin/estadisticas", icon: BarChart3 },
     ],
   },
   {

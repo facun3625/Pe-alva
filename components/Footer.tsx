@@ -40,11 +40,7 @@ export default function Footer() {
 
           {/* Col 1 — Marca */}
           <div>
-            <img
-              src="/logo.png"
-              alt="Penalva Inmobiliaria"
-              className="h-10 w-auto object-contain mb-5 brightness-0 invert opacity-75"
-            />
+            <img src="/logo.png" alt="Penalva Inmobiliaria" className="h-10 w-auto object-contain mb-5 brightness-0 invert opacity-75" />
             <p className="text-[13px] text-white/30 leading-relaxed mb-6 max-w-xs">
               Más de 20 años de trayectoria en Santa Fe, garantizando seriedad, confianza y resultados reales.
             </p>
@@ -101,12 +97,7 @@ export default function Footer() {
       <div className="border-t border-white/[0.05]">
         <div className="max-w-7xl mx-auto px-8 md:px-12 lg:px-16 py-5 flex flex-col md:flex-row justify-between items-center gap-3 text-[11px] text-white/15">
           <span>© {new Date().getFullYear()} Penalva Inmobiliaria de P+P SRL. Todos los derechos reservados.</span>
-          <a
-            href="https://kubbo.com.ar"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 hover:opacity-70 transition-opacity"
-          >
+          <a href="https://kubbo.com.ar" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:opacity-70 transition-opacity">
             <span className="text-white/20 text-[10px] uppercase tracking-widest">Desarrollado por</span>
             <img src="/kubbo.png" alt="Kubbo" className="h-4 w-auto opacity-60" />
           </a>

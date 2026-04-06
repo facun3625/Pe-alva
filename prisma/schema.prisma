@@ -49,3 +49,22 @@ model Property {
   published    Boolean  @default(true)
   createdAt    DateTime @default(now())
 }
+
+model SiteConfig {
+  id        String   @id @default("singleton")
+  facebook  String?
+  instagram String?
+  whatsapp  String?
+  phone     String?
+  email     String?
+  address   String?
+  updatedAt DateTime @updatedAt
+}
+
+model PageView {
+  id         String   @id @default(uuid())
+  path       String
+  propertyId String?
+  sessionId  String?
+  createdAt  DateTime @default(now())
+}

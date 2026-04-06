@@ -1,20 +1,18 @@
 import React from "react";
 import {
   Phone,
-  Mail,
   MapPin,
-  Facebook,
-  Instagram,
   ArrowRight,
   Bed,
-  Heart,
 } from "lucide-react";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 import Footer from "@/components/Footer";
-import AccesoButton from "@/components/AccesoButton";
+import Header from "@/components/Header";
 import SearchForm from "@/components/SearchForm";
+import FavoriteCardButton from "@/components/FavoriteCardButton";
 import AnimateIn from "@/components/AnimateIn";
+import { getSiteConfig } from "@/lib/config";
 
 interface Property {
   id: string;
@@ -40,73 +38,25 @@ async function getProperties(): Promise<Property[]> {
 }
 
 export default async function Home() {
-  const [properties, operations, cities, propertyTypes, session] = await Promise.all([
+  const [properties, operations, cities, propertyTypes, session, siteConfig] = await Promise.all([
     getProperties(),
     prisma.operationType.findMany({ orderBy: { order: "asc" } }),
     prisma.city.findMany({ orderBy: { order: "asc" } }),
     prisma.propertyType.findMany({ orderBy: { order: "asc" } }),
     getSession(),
+    getSiteConfig(),
   ]);
 
   return (
     <div className="flex flex-col min-h-screen bg-white text-[#111]">
 
-      {/* ── HEADER ── */}
-      <header className="sticky top-0 z-50">
-
-        {/* Fila 1 — Top bar gris oscuro con teléfono */}
-        <div className="bg-[#3a3a3a] px-4 h-9 flex items-center justify-end">
-          <div className="max-w-7xl w-full mx-auto flex items-center justify-end gap-6 text-[11px] text-white/55">
-            <div className="flex items-center gap-1.5">
-              <Mail size={11} className="text-white/60" />
-              <span>administracion@penalvainmobiliaria.com.ar</span>
-            </div>
-            <a href="tel:+543424565000" className="flex items-center gap-1.5 hover:text-white transition-colors">
-              <Phone size={11} className="text-white/60" />
-              <span>+54 342 456-5000</span>
-            </a>
-            <div className="flex items-center gap-3 pl-3 border-l border-white/10">
-              <a href="#" aria-label="Facebook" className="hover:text-white transition-colors"><Facebook size={12} /></a>
-              <a href="#" aria-label="Instagram" className="hover:text-white transition-colors"><Instagram size={12} /></a>
-            </div>
-          </div>
-        </div>
-
-        {/* Fila 2 — Logo negro centrado */}
-        <div className="bg-[#262522] py-5 flex justify-center items-center">
-          <a href="/">
-            <img
-              src="/logo.png"
-              alt="Penalva Inmobiliaria"
-              className="h-16 md:h-20 w-auto object-contain"
-            />
-          </a>
-        </div>
-
-        {/* Fila 3 — Nav naranja centrada */}
-        <div className="bg-brand-orange">
-          <div className="px-4 h-12 flex items-center justify-center gap-2">
-            <nav className="flex items-center text-[13px] font-medium text-white/70">
-              <a href="#" className="px-5 py-3 hover:text-white transition-colors">Inicio</a>
-              <span className="w-px h-3.5 bg-white/25" />
-              <a href="/nosotros" className="px-5 py-3 hover:text-white transition-colors">Nosotros</a>
-              <span className="w-px h-3.5 bg-white/25" />
-              <a href="/tasacion" className="px-5 py-3 hover:text-white transition-colors">Tasación</a>
-              <span className="w-px h-3.5 bg-white/25" />
-              <a href="/mapa" className="px-5 py-3 hover:text-white transition-colors">Propiedades en Mapa</a>
-              <span className="w-px h-3.5 bg-white/25" />
-              <a href="#contacto" className="px-5 py-3 hover:text-white transition-colors">Contacto</a>
-            </nav>
-            <AccesoButton isLoggedIn={!!session} />
-          </div>
-        </div>
-      </header>
+      <Header active="/" isLoggedIn={!!session} />
 
       {/* ── HERO — split: buscador izq / imagen der ── */}
-      <section className="flex h-[380px]">
+      <section className="flex md:h-[380px]">
 
         {/* Izquierda — buscador 65% */}
-        <div className="w-full md:w-[65%] bg-[#f0efed] flex flex-col justify-center py-10">
+        <div className="w-full md:w-[65%] bg-[#f0efed] flex flex-col justify-center py-8 md:py-10">
           <div className="w-full px-8 md:px-12 lg:px-16">
             <AnimateIn from="left">
             <h1 className="text-3xl md:text-[32px] font-bold text-[#111] mb-2 leading-tight">
@@ -124,11 +74,11 @@ export default async function Home() {
             <div className="mt-10 space-y-2">
               <div className="flex items-center gap-2 text-[13px] text-gray-500">
                 <MapPin size={13} className="text-brand-orange shrink-0" />
-                <span>Eva Perón 2845 — Santa Fe, Argentina</span>
+                <span>{siteConfig.address}</span>
               </div>
               <div className="flex items-center gap-2 text-[13px] text-gray-500">
                 <Phone size={13} className="text-brand-orange shrink-0" />
-                <span>+54 (342) 456-5000</span>
+                <span>{siteConfig.phone}</span>
               </div>
             </div>
           </div>
@@ -147,7 +97,7 @@ export default async function Home() {
 
       {/* ── FEATURED PROPERTIES ── */}
       <section id="propiedades" className="pt-10 pb-16 bg-[#f8f6f2]">
-        <div className="max-w-7xl mx-auto px-8 md:px-12 lg:px-16">
+        <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
           <AnimateIn from="left" className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
             <div>
               <p className="text-brand-orange text-[10px] uppercase tracking-[0.4em] font-semibold mb-3">Portafolio</p>
@@ -166,7 +116,7 @@ export default async function Home() {
 
           {properties.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {properties.slice(0, 6).map((property, i) => (
+              {properties.slice(0, 6).map((property: Property, i: number) => (
                 <AnimateIn key={property.id} delay={i * 80}>
                 <a
                   key={property.id}
@@ -198,10 +148,7 @@ export default async function Home() {
                       </span>
                     </div>
 
-                    {/* Favoritos */}
-                    <button className="absolute top-3 right-3 bg-white/90 hover:bg-white p-2 rounded-full shadow transition-all opacity-0 group-hover:opacity-100 hover:scale-110">
-                      <Heart size={13} className="text-gray-500 hover:text-red-500 transition-colors" />
-                    </button>
+                    <FavoriteCardButton propertyId={property.id} />
                   </div>
 
                   {/* Contenido */}

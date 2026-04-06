@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
+import TrackPageView from "@/components/TrackPageView";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -20,6 +21,7 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={`${montserrat.variable} antialiased`}>
+        <TrackPageView />
         {children}
       </body>
     </html>
