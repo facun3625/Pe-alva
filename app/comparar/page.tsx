@@ -2,8 +2,10 @@ import React from "react";
 import { Check, X } from "lucide-react";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
+import { getSiteConfig } from "@/lib/config";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
+import { formatPrice } from "@/lib/formatPrice";
 
 interface Props {
   searchParams: Promise<{ ids?: string }>;
@@ -23,7 +25,7 @@ function Val({ value }: { value: any }) {
 
 export default async function CompararPage({ searchParams }: Props) {
   const { ids } = await searchParams;
-  const session = await getSession();
+  const [session, siteConfig] = await Promise.all([getSession(), getSiteConfig()]);
 
   const idList = ids ? ids.split(",").slice(0, 3) : [];
   const properties = idList.length > 0
@@ -31,7 +33,7 @@ export default async function CompararPage({ searchParams }: Props) {
     : [];
 
   const rows = [
-    { label: "Precio", key: "price", format: (v: any) => v ? `USD ${Number(v).toLocaleString("es-AR")}` : null },
+    { label: "Precio", key: "price", format: (v: any, prop: any) => v ? formatPrice(Number(v), prop?.currency, prop?.pricePerMonth) : null },
     { label: "Operación", key: "type" },
     { label: "Tipo de propiedad", key: "propertyType" },
     { label: "Ciudad", key: "city" },
@@ -102,7 +104,7 @@ export default async function CompararPage({ searchParams }: Props) {
                   </div>
                   {properties.map((p) => {
                     const raw = (p as any)[row.key];
-                    const display = row.format ? row.format(raw) : raw;
+                    const display = row.format ? row.format(raw, p) : raw;
                     return (
                       <div key={p.id} className="px-5 py-3.5 text-[14px] text-[#111] border-r border-gray-100 last:border-r-0 text-center flex items-center justify-center">
                         <Val value={display ?? raw} />
@@ -131,7 +133,7 @@ export default async function CompararPage({ searchParams }: Props) {
         </div>
       </section>
 
-      <Footer />
+      <Footer siteConfig={siteConfig} />
     </div>
   );
 }

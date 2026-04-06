@@ -40,6 +40,8 @@ export async function POST(request: Request) {
             coveredArea,
             totalArea,
             featured,
+            currency,
+            pricePerMonth,
         } = body;
 
         // Server-side geocoding fallback
@@ -80,6 +82,8 @@ export async function POST(request: Request) {
                 coveredArea: coveredArea ? parseFloat(coveredArea) : null,
                 totalArea: totalArea ? parseFloat(totalArea) : null,
                 featured: featured ?? false,
+                currency: currency || "USD",
+                pricePerMonth: pricePerMonth ?? false,
             },
         });
 

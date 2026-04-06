@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Building2, Eye, Pencil, Trash2, MapPin, Loader2, Plus, Search, Star, X } from "lucide-react";
+import { formatPrice } from "@/lib/formatPrice";
 
 export default function PropiedadesPage() {
   const [properties, setProperties] = useState<any[]>([]);
@@ -157,7 +158,7 @@ export default function PropiedadesPage() {
                     <span className="text-[12px] text-gray-500">{p.propertyType || "—"}</span>
                   </td>
                   <td className="px-3 py-3.5">
-                    <span className="text-[13px] font-semibold text-brand-orange">USD {p.price.toLocaleString("es-AR")}</span>
+                    <span className="text-[13px] font-semibold text-brand-orange">{formatPrice(p.price, p.currency, p.pricePerMonth)}</span>
                   </td>
                   <td className="px-3 py-3.5 text-center">
                     <button onClick={() => togglePublished(p.id, p.published ?? true)}

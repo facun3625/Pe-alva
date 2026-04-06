@@ -4,6 +4,8 @@ import {
   MapPin,
   ArrowRight,
   Bed,
+  Bath,
+  Car,
 } from "lucide-react";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
@@ -13,12 +15,16 @@ import SearchForm from "@/components/SearchForm";
 import FavoriteCardButton from "@/components/FavoriteCardButton";
 import AnimateIn from "@/components/AnimateIn";
 import { getSiteConfig } from "@/lib/config";
+import { getContent } from "@/lib/content";
+import { formatPrice } from "@/lib/formatPrice";
 
 interface Property {
   id: string;
   title: string;
   description: string;
   price: number;
+  currency?: string;
+  pricePerMonth?: boolean;
   city: string;
   address: string;
   lat: number | null;
@@ -27,24 +33,33 @@ interface Property {
   type: string;
   propertyType: string;
   bedrooms?: number | null;
+  bathrooms?: number | null;
+  hasGarage?: boolean;
+  garages?: number | null;
 }
 
 async function getProperties(): Promise<Property[]> {
   try {
-    return await prisma.property.findMany({ orderBy: { createdAt: "desc" } }) as any as Property[];
+    return await (prisma.property as any).findMany({
+      where: { featured: true, published: true },
+      orderBy: { featuredOrder: "asc" },
+      take: 6,
+    }) as Property[];
   } catch {
     return [];
   }
 }
 
 export default async function Home() {
-  const [properties, operations, cities, propertyTypes, session, siteConfig] = await Promise.all([
+  const [properties, operations, cities, propertyTypes, session, siteConfig, heroTitulo, heroSubtitulo] = await Promise.all([
     getProperties(),
     prisma.operationType.findMany({ orderBy: { order: "asc" } }),
     prisma.city.findMany({ orderBy: { order: "asc" } }),
     prisma.propertyType.findMany({ orderBy: { order: "asc" } }),
     getSession(),
     getSiteConfig(),
+    getContent("home_titulo"),
+    getContent("home_subtitulo"),
   ]);
 
   return (
@@ -53,34 +68,30 @@ export default async function Home() {
       <Header active="/" isLoggedIn={!!session} />
 
       {/* ── HERO — split: buscador izq / imagen der ── */}
-      <section className="flex md:h-[380px]">
+      <section className="flex md:h-[260px]">
 
         {/* Izquierda — buscador 65% */}
-        <div className="w-full md:w-[65%] bg-[#f0efed] flex flex-col justify-center py-8 md:py-10">
+        <div className="w-full md:w-[65%] bg-[#f0efed] flex flex-col justify-center py-6 md:py-0">
           <div className="w-full px-8 md:px-12 lg:px-16">
             <AnimateIn from="left">
-            <h1 className="text-3xl md:text-[32px] font-bold text-[#111] mb-2 leading-tight">
-              Buscar Propiedades
-            </h1>
-            <p className="text-gray-500 text-[14px] mb-8">
-              Encontrá la propiedad que estás buscando
-            </p>
-
-            {/* Buscador inline */}
-            <SearchForm operations={operations} cities={cities} propertyTypes={propertyTypes} />
+              <h1 className="text-2xl md:text-[24px] font-bold text-[#111] mb-1 leading-tight">
+                {heroTitulo}
+              </h1>
+              <p className="text-gray-500 text-[13px] mb-5">
+                {heroSubtitulo}
+              </p>
+              <SearchForm operations={operations} cities={cities} propertyTypes={propertyTypes} />
+              <div className="mt-4 flex items-center gap-6">
+                <div className="flex items-center gap-1.5 text-[12px] text-gray-400">
+                  <MapPin size={12} className="text-brand-orange shrink-0" />
+                  <span>{siteConfig.address}</span>
+                </div>
+                <div className="flex items-center gap-1.5 text-[12px] text-gray-400">
+                  <Phone size={12} className="text-brand-orange shrink-0" />
+                  <span>{siteConfig.phone}</span>
+                </div>
+              </div>
             </AnimateIn>
-
-            {/* Contacto */}
-            <div className="mt-10 space-y-2">
-              <div className="flex items-center gap-2 text-[13px] text-gray-500">
-                <MapPin size={13} className="text-brand-orange shrink-0" />
-                <span>{siteConfig.address}</span>
-              </div>
-              <div className="flex items-center gap-2 text-[13px] text-gray-500">
-                <Phone size={13} className="text-brand-orange shrink-0" />
-                <span>{siteConfig.phone}</span>
-              </div>
-            </div>
           </div>
         </div>
 
@@ -96,7 +107,7 @@ export default async function Home() {
 
 
       {/* ── FEATURED PROPERTIES ── */}
-      <section id="propiedades" className="pt-10 pb-16 bg-[#f8f6f2]">
+      <section id="propiedades" className="pt-8 pb-16 bg-[#f8f6f2]">
         <div className="max-w-7xl mx-auto px-4 md:px-8 lg:px-16">
           <AnimateIn from="left" className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
             <div>
@@ -155,7 +166,7 @@ export default async function Home() {
                   <div className="p-5">
                     <div className="flex items-start justify-between mb-1.5">
                       <div className="text-brand-orange font-bold text-xl">
-                        USD {property.price.toLocaleString("es-AR")}
+                        {formatPrice(property.price, property.currency, property.pricePerMonth)}
                       </div>
                       <span className="text-[10px] font-medium uppercase tracking-wide text-gray-400 bg-gray-100 px-2 py-0.5 rounded">
                         {property.propertyType}
@@ -168,10 +179,17 @@ export default async function Home() {
                       <MapPin size={11} />
                       <span className="truncate">{property.city}, {property.address}</span>
                     </div>
-                    {property.bedrooms && (
-                      <div className="flex items-center gap-1.5 text-gray-400 text-xs mt-3 pt-3 border-t border-gray-100">
-                        <Bed size={12} />
-                        <span>{property.bedrooms} dormitorio{property.bedrooms !== 1 ? "s" : ""}</span>
+                    {(property.bedrooms != null || property.bathrooms != null || property.hasGarage) && (
+                      <div className="flex items-center gap-3 text-gray-400 text-xs mt-3 pt-3 border-t border-gray-100">
+                        {property.bedrooms != null && (
+                          <span className="flex items-center gap-1"><Bed size={12} />{property.bedrooms} dorm.</span>
+                        )}
+                        {property.bathrooms != null && (
+                          <span className="flex items-center gap-1"><Bath size={12} />{property.bathrooms} baño{property.bathrooms !== 1 ? "s" : ""}</span>
+                        )}
+                        {property.hasGarage && (
+                          <span className="flex items-center gap-1"><Car size={12} />Cochera{property.garages && property.garages > 1 ? ` x${property.garages}` : ""}</span>
+                        )}
                       </div>
                     )}
                   </div>
@@ -189,7 +207,7 @@ export default async function Home() {
 
 
       {/* ── FOOTER ── */}
-      <Footer />
+      <Footer siteConfig={siteConfig} />
     </div>
   );
 }

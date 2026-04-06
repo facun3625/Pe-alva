@@ -13,7 +13,7 @@ export default function AccesoButton({ isLoggedIn = false }: { isLoggedIn?: bool
     if (searchParams.get("login") === "1") setOpen(true);
   }, [searchParams]);
 
-  const cls = "absolute right-6 hidden md:flex items-center gap-1.5 bg-white/10 hover:bg-white/20 text-white/80 hover:text-white transition-all text-[11px] font-semibold px-3 py-1 rounded-full border border-white/20 cursor-pointer";
+  const cls = "flex items-center gap-1.5 bg-white/10 hover:bg-white/20 text-white/80 hover:text-white transition-all text-[11px] font-semibold px-3 py-1 rounded-full border border-white/20 cursor-pointer";
 
   if (isLoggedIn) {
     return (

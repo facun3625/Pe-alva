@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { Phone, Mail, Facebook, Instagram, Menu, X, LayoutDashboard, Lock } from "lucide-react";
+import AccesoButton from "@/components/AccesoButton";
+import FavoritosNavButton from "@/components/FavoritosNavButton";
 
 const NAV_LINKS = [
   { href: "/", label: "Inicio" },
@@ -78,26 +80,8 @@ export default function Header({ active, isLoggedIn }: Props) {
 
           {/* Desktop right buttons */}
           <div className="hidden md:flex items-center gap-2 md:absolute md:right-4">
-            <a
-              href="/favoritos"
-              className="w-8 h-8 flex items-center justify-center rounded-full border border-white/30 text-white/70 hover:text-white hover:border-white/60 transition-colors"
-              title="Mis favoritos"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-              </svg>
-            </a>
-            {isLoggedIn ? (
-              <a href="/admin" className="flex items-center gap-1.5 border border-white/40 text-white text-[12px] font-semibold px-3 py-1.5 rounded-full hover:bg-white/10 transition-colors">
-                <LayoutDashboard size={13} />
-                Dashboard
-              </a>
-            ) : (
-              <a href="/admin/login" className="flex items-center gap-1.5 border border-white/40 text-white text-[12px] font-semibold px-3 py-1.5 rounded-full hover:bg-white/10 transition-colors">
-                <Lock size={13} />
-                Acceso
-              </a>
-            )}
+            <FavoritosNavButton />
+            <AccesoButton isLoggedIn={isLoggedIn} />
           </div>
         </div>
       </div>
@@ -118,12 +102,7 @@ export default function Header({ active, isLoggedIn }: Props) {
                 {link.label}
               </a>
             ))}
-            <a href="/favoritos" onClick={() => setOpen(false)} className="px-6 py-4 text-[14px] font-medium text-white/80 hover:bg-white/5 border-b border-white/5 flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-              </svg>
-              Mis favoritos
-            </a>
+            <FavoritosNavButton mobile onClick={() => setOpen(false)} />
             {isLoggedIn ? (
               <a href="/admin" onClick={() => setOpen(false)} className="px-6 py-4 text-[14px] font-medium text-brand-orange hover:bg-white/5 flex items-center gap-2">
                 <LayoutDashboard size={14} />

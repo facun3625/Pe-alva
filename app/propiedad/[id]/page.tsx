@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
+import { getSiteConfig } from "@/lib/config";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import PropertyGallery from "@/components/PropertyGallery";
@@ -23,6 +24,7 @@ import CompareButton from "@/components/CompareButton";
 import CompareBar from "@/components/CompareBar";
 import CopyLinkButton from "@/components/CopyLinkButton";
 import PropertySearchSidebar from "@/components/PropertySearchSidebar";
+import { formatPrice } from "@/lib/formatPrice";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -40,12 +42,13 @@ export async function generateMetadata({ params }: Props) {
 
 export default async function PropertyPage({ params }: Props) {
   const { id } = await params;
-  const [property, operations, cities, propertyTypes, session] = await Promise.all([
+  const [property, operations, cities, propertyTypes, session, siteConfig] = await Promise.all([
     prisma.property.findUnique({ where: { id } }),
     prisma.operationType.findMany({ orderBy: { order: "asc" } }),
     prisma.city.findMany({ orderBy: { order: "asc" } }),
     prisma.propertyType.findMany({ orderBy: { order: "asc" } }),
     getSession(),
+    getSiteConfig(),
   ]);
   if (!property) notFound();
 
@@ -62,6 +65,7 @@ export default async function PropertyPage({ params }: Props) {
   }
 
   const whatsappMsg = encodeURIComponent(`Hola, me interesa la propiedad "${property.title}" en ${property.address}. ¿Pueden darme más información?`);
+  const waNumber = siteConfig.whatsapp.replace(/[^0-9]/g, "");
 
   const specs = [
     property.bedrooms != null && { icon: Bed, label: "Dormitorios", value: property.bedrooms },
@@ -190,12 +194,12 @@ export default async function PropertyPage({ params }: Props) {
               <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
                 <p className="text-[10px] text-gray-400 uppercase tracking-widest font-medium mb-1">Precio</p>
                 <div className="text-xl font-semibold text-brand-orange mb-5">
-                  USD {property.price.toLocaleString("es-AR")}
+                  {formatPrice(property.price, property.currency ?? "USD", property.pricePerMonth ?? false)}
                 </div>
 
                 <div className="space-y-3">
                   <a
-                    href={`https://wa.me/543424565000?text=${whatsappMsg}`}
+                    href={`https://wa.me/${waNumber}?text=${whatsappMsg}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center justify-center gap-2.5 w-full bg-[#25D366] hover:bg-[#1ebe5d] text-white font-semibold text-[13px] uppercase tracking-wider py-3 rounded-lg transition-colors"
@@ -204,11 +208,11 @@ export default async function PropertyPage({ params }: Props) {
                     Consultar por WhatsApp
                   </a>
                   <a
-                    href="tel:+543424565000"
+                    href={`tel:${siteConfig.phone.replace(/[^0-9+]/g, "")}`}
                     className="flex items-center justify-center gap-2.5 w-full bg-[#262522] hover:bg-[#1a1917] text-white font-semibold text-[13px] uppercase tracking-wider py-3 rounded-lg transition-colors"
                   >
                     <Phone size={14} />
-                    +54 342 456-5000
+                    {siteConfig.phone}
                   </a>
                   <FavoriteButton propertyId={property.id} />
                   <CompareButton propertyId={property.id} />
@@ -248,15 +252,15 @@ export default async function PropertyPage({ params }: Props) {
                 <div className="space-y-3 text-[13px] text-white/50">
                   <div className="flex items-start gap-2.5">
                     <MapPin size={13} className="text-brand-orange mt-0.5 shrink-0" />
-                    <span>Eva Perón 2845, Santa Fe</span>
+                    <span>{siteConfig.address}</span>
                   </div>
                   <div className="flex items-center gap-2.5">
                     <Phone size={13} className="text-brand-orange shrink-0" />
-                    <span>+54 (342) 456-5000</span>
+                    <span>{siteConfig.phone}</span>
                   </div>
                   <div className="flex items-center gap-2.5">
                     <Mail size={13} className="text-brand-orange shrink-0" />
-                    <span className="break-all">administracion@penalvainmobiliaria.com.ar</span>
+                    <span className="break-all">{siteConfig.email}</span>
                   </div>
                 </div>
               </div>
@@ -267,7 +271,7 @@ export default async function PropertyPage({ params }: Props) {
         </div>
       </div>
 
-      <Footer />
+      <Footer siteConfig={siteConfig} />
       <CompareBar />
     </div>
   );

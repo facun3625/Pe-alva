@@ -18,6 +18,7 @@ export default function FavoriteCardButton({ propertyId }: { propertyId: string 
     const next = saved ? favs.filter((i) => i !== propertyId) : [...favs, propertyId];
     localStorage.setItem("penalva_favs", JSON.stringify(next));
     setSaved(!saved);
+    window.dispatchEvent(new Event("favs-update"));
   };
 
   return (

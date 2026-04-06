@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import {
   LayoutDashboard,
   Building2,
@@ -14,6 +15,7 @@ import {
   SlidersHorizontal,
   ExternalLink,
   BarChart3,
+  Star,
 } from "lucide-react";
 
 const NAV = [
@@ -23,6 +25,7 @@ const NAV = [
       { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
       { label: "Propiedades", href: "/admin/propiedades", icon: Building2 },
       { label: "Nueva propiedad", href: "/admin/nueva", icon: Plus },
+      { label: "Destacadas", href: "/admin/destacadas", icon: Star },
       { label: "Opciones", href: "/admin/opciones", icon: SlidersHorizontal },
       { label: "Estadísticas", href: "/admin/estadisticas", icon: BarChart3 },
     ],
@@ -37,7 +40,7 @@ const NAV = [
   {
     section: "Contenido",
     items: [
-      { label: "Páginas", href: "/admin/paginas", icon: FileText },
+      { label: "Textos del sitio", href: "/admin/contenido", icon: FileText },
       { label: "Configuración", href: "/admin/configuracion", icon: Settings },
     ],
   },
@@ -46,6 +49,21 @@ const NAV = [
 export default function AdminSidebar() {
   const pathname = usePathname();
   const router = useRouter();
+  const [pendingTasaciones, setPendingTasaciones] = useState(0);
+
+  const [pendingContacts, setPendingContacts] = useState(0);
+
+  useEffect(() => {
+    Promise.all([
+      fetch("/api/tasaciones").then((r) => r.json()),
+      fetch("/api/contacts").then((r) => r.json()),
+    ])
+      .then(([tas, con]) => {
+        setPendingTasaciones((tas as { status: string }[]).filter((r) => r.status === "pending").length);
+        setPendingContacts((con as { status: string }[]).filter((r) => r.status === "pending").length);
+      })
+      .catch(() => {});
+  }, [pathname]);
 
   const logout = async () => {
     await fetch("/api/auth/logout", { method: "POST" });
@@ -87,7 +105,19 @@ export default function AdminSidebar() {
                     >
                       <Icon size={15} className={active ? "text-white" : "text-white/30 group-hover:text-white/60"} />
                       {item.label}
-                      {active && <ChevronRight size={13} className="ml-auto opacity-60" />}
+                      {(() => {
+                        const badge =
+                          item.href === "/admin/tasaciones" && pendingTasaciones > 0 ? pendingTasaciones
+                          : item.href === "/admin/contactos" && pendingContacts > 0 ? pendingContacts
+                          : 0;
+                        return badge > 0 ? (
+                          <span className="ml-auto bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full leading-none">
+                            {badge}
+                          </span>
+                        ) : active ? (
+                          <ChevronRight size={13} className="ml-auto opacity-60" />
+                        ) : null;
+                      })()}
                     </a>
                   </li>
                 );

@@ -13,6 +13,9 @@ import {
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { getSession } from "@/lib/auth";
+import { getSiteConfig } from "@/lib/config";
+import { getContent } from "@/lib/content";
+import TasacionForm from "@/components/TasacionForm";
 
 export const metadata = {
   title: "Tasación de Propiedades — Penalva Inmobiliaria",
@@ -81,7 +84,20 @@ const TYPES = [
 ];
 
 export default async function TasacionPage() {
-  const session = await getSession();
+  const [session, siteConfig, heroTitulo, heroSubtitulo, introTitulo, introP1, introP2, introCta, tiposTitulo, procesoTitulo, formTitulo, formSubtitulo] = await Promise.all([
+    getSession(),
+    getSiteConfig(),
+    getContent("tasacion_hero_titulo"),
+    getContent("tasacion_hero_subtitulo"),
+    getContent("tasacion_intro_titulo"),
+    getContent("tasacion_intro_p1"),
+    getContent("tasacion_intro_p2"),
+    getContent("tasacion_intro_cta"),
+    getContent("tasacion_tipos_titulo"),
+    getContent("tasacion_proceso_titulo"),
+    getContent("tasacion_form_titulo"),
+    getContent("tasacion_form_subtitulo"),
+  ]);
   return (
     <div className="flex flex-col min-h-screen bg-white text-[#111]">
 
@@ -101,10 +117,12 @@ export default async function TasacionPage() {
               Servicios
             </p>
             <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight">
-              Tasación de<br />Propiedades
+              {heroTitulo.split("\n").map((line: string, i: number, arr: string[]) => (
+                <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+              ))}
             </h1>
             <p className="mt-3 text-white/50 text-[14px] max-w-md leading-relaxed">
-              Conocé el valor real de tu propiedad con un informe profesional respaldado por el mercado.
+              {heroSubtitulo}
             </p>
           </div>
         </div>
@@ -120,18 +138,12 @@ export default async function TasacionPage() {
                 Tasación profesional
               </p>
               <h2 className="text-3xl md:text-[32px] font-bold text-[#111] mb-6 leading-tight">
-                ¿Desea vender o alquilar su propiedad?
+                {introTitulo}
               </h2>
               <div className="space-y-4 text-[15px] text-gray-600 leading-relaxed">
-                <p>
-                  Contamos con un equipo altamente especializado y con amplio conocimiento del mercado inmobiliario, capacitado para realizar una real y exacta tasación de su inmueble.
-                </p>
-                <p>
-                  Nuestro interés es brindarle el mejor servicio para su mejor beneficio.
-                </p>
-                <p className="text-brand-orange font-semibold">
-                  Complete el formulario y a la brevedad lo contactaremos personalmente.
-                </p>
+                <p>{introP1}</p>
+                <p>{introP2}</p>
+                <p className="text-brand-orange font-semibold">{introCta}</p>
               </div>
 
               <div className="mt-8 flex items-center gap-3 text-[13px] text-gray-500">
@@ -169,7 +181,7 @@ export default async function TasacionPage() {
               Coberturas
             </p>
             <h2 className="text-3xl md:text-[32px] font-bold text-[#111]">
-              Qué tipos de propiedades tasamos
+              {tiposTitulo}
             </h2>
           </div>
 
@@ -201,7 +213,7 @@ export default async function TasacionPage() {
               El proceso
             </p>
             <h2 className="text-3xl md:text-[32px] font-bold text-white">
-              Cómo funciona
+              {procesoTitulo}
             </h2>
           </div>
 
@@ -229,86 +241,36 @@ export default async function TasacionPage() {
                 Solicitá ahora
               </p>
               <h2 className="text-3xl md:text-[32px] font-bold text-[#111] mb-4 leading-tight">
-                Tasá tu propiedad<br />sin costo
+                {formTitulo.split("\n").map((line: string, i: number, arr: string[]) => (
+                  <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+                ))}
               </h2>
               <p className="text-gray-500 text-[15px] leading-relaxed mb-8">
-                Completá el formulario y uno de nuestros asesores se pondrá en contacto con vos dentro de las próximas 24 horas.
+                {formSubtitulo}
               </p>
               <div className="space-y-4 text-[14px] text-gray-500">
                 <div className="flex items-center gap-3">
                   <Phone size={14} className="text-brand-orange shrink-0" />
-                  <span>+54 (342) 456-5000</span>
+                  <span>{siteConfig.phone}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <Mail size={14} className="text-brand-orange shrink-0" />
-                  <span>administracion@penalvainmobiliaria.com.ar</span>
+                  <span>{siteConfig.email}</span>
                 </div>
                 <div className="flex items-start gap-3">
                   <MapPin size={14} className="text-brand-orange shrink-0 mt-0.5" />
-                  <span>Eva Perón 2845, Santa Fe<br />Lunes a Viernes 08:00 – 17:00 hs.</span>
+                  <span>{siteConfig.address}</span>
                 </div>
               </div>
             </div>
 
-            <form className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 space-y-5">
-              <div className="space-y-1.5">
-                <label className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">Dirección de la propiedad</label>
-                <input
-                  type="text"
-                  placeholder="Calle y número, ciudad"
-                  className="w-full px-4 py-3 text-[13px] border border-gray-200 rounded-lg focus:outline-none focus:border-brand-orange transition-colors"
-                />
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">Tipo de propiedad</label>
-                <select className="w-full px-4 py-3 text-[13px] border border-gray-200 rounded-lg focus:outline-none focus:border-brand-orange transition-colors appearance-none bg-white text-gray-600">
-                  <option value="">Seleccionar</option>
-                  <option>Casa</option>
-                  <option>Departamento</option>
-                  <option>Terreno</option>
-                  <option>Local comercial</option>
-                  <option>Otro</option>
-                </select>
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">Superficie aproximada (m²)</label>
-                <input
-                  type="number"
-                  placeholder="Ej: 120"
-                  className="w-full px-4 py-3 text-[13px] border border-gray-200 rounded-lg focus:outline-none focus:border-brand-orange transition-colors"
-                />
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                <div className="space-y-1.5">
-                  <label className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">Teléfono celular</label>
-                  <input
-                    type="tel"
-                    placeholder="+54 342..."
-                    className="w-full px-4 py-3 text-[13px] border border-gray-200 rounded-lg focus:outline-none focus:border-brand-orange transition-colors"
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <label className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">Correo electrónico</label>
-                  <input
-                    type="email"
-                    placeholder="tu@email.com"
-                    className="w-full px-4 py-3 text-[13px] border border-gray-200 rounded-lg focus:outline-none focus:border-brand-orange transition-colors"
-                  />
-                </div>
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-brand-orange text-white font-bold text-[13px] uppercase tracking-wider py-4 rounded-lg hover:bg-orange-700 transition-colors"
-              >
-                Solicitar tasación gratuita
-              </button>
-            </form>
+            <TasacionForm />
 
           </div>
         </div>
       </section>
 
-      <Footer />
+      <Footer siteConfig={siteConfig} />
     </div>
   );
 }

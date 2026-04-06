@@ -1,6 +1,7 @@
 import React from "react";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
+import { getSiteConfig } from "@/lib/config";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import SearchForm from "@/components/SearchForm";
@@ -29,12 +30,13 @@ export default async function PropiedadesPage({ searchParams }: Props) {
     }
   }
 
-  const [properties, operations, cities, propertyTypes, session] = await Promise.all([
+  const [properties, operations, cities, propertyTypes, session, siteConfig] = await Promise.all([
     prisma.property.findMany({ where, orderBy: { createdAt: "desc" } }),
     prisma.operationType.findMany({ orderBy: { order: "asc" } }),
     prisma.city.findMany({ orderBy: { order: "asc" } }),
     prisma.propertyType.findMany({ orderBy: { order: "asc" } }),
     getSession(),
+    getSiteConfig(),
   ]);
 
   const hasFilters = !!(ciudad || tipo || operacion || dormitorios);
@@ -63,7 +65,7 @@ export default async function PropiedadesPage({ searchParams }: Props) {
         </div>
       </section>
 
-      <Footer />
+      <Footer siteConfig={siteConfig} />
     </div>
   );
 }

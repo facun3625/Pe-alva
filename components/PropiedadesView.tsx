@@ -1,15 +1,18 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { MapPin, LayoutGrid, Map, Bed, Heart, SlidersHorizontal, GitCompare } from "lucide-react";
+import { MapPin, LayoutGrid, Map, Bed, Bath, Car, SlidersHorizontal, GitCompare, Heart } from "lucide-react";
 import MapLoader from "@/components/MapLoader";
 import CompareBar from "@/components/CompareBar";
 import FavoriteCardButton from "@/components/FavoriteCardButton";
+import { formatPrice } from "@/lib/formatPrice";
 
 interface Property {
   id: string;
   title: string;
   price: number;
+  currency?: string;
+  pricePerMonth?: boolean;
   city: string;
   address: string;
   lat: number | null;
@@ -18,6 +21,9 @@ interface Property {
   type: string;
   propertyType: string;
   bedrooms?: number | null;
+  bathrooms?: number | null;
+  hasGarage?: boolean;
+  garages?: number | null;
 }
 
 interface Props {
@@ -119,7 +125,7 @@ export default function PropiedadesView({ properties, hasFilters }: Props) {
                     <div className="p-5">
                       <div className="flex items-start justify-between mb-1.5">
                         <div className="text-brand-orange font-bold text-xl">
-                          USD {property.price.toLocaleString("es-AR")}
+                          {formatPrice(property.price, property.currency, property.pricePerMonth)}
                         </div>
                         <span className="text-[10px] font-medium uppercase tracking-wide text-gray-400 bg-gray-100 px-2 py-0.5 rounded">
                           {property.propertyType}
@@ -130,10 +136,17 @@ export default function PropiedadesView({ properties, hasFilters }: Props) {
                         <MapPin size={11} />
                         <span className="truncate">{property.city}, {property.address}</span>
                       </div>
-                      {property.bedrooms != null && (
-                        <div className="flex items-center gap-1.5 text-gray-400 text-xs mt-3 pt-3 border-t border-gray-100">
-                          <Bed size={12} />
-                          <span>{property.bedrooms} dormitorio{property.bedrooms !== 1 ? "s" : ""}</span>
+                      {(property.bedrooms != null || property.bathrooms != null || property.hasGarage) && (
+                        <div className="flex items-center gap-3 text-gray-400 text-xs mt-3 pt-3 border-t border-gray-100">
+                          {property.bedrooms != null && (
+                            <span className="flex items-center gap-1"><Bed size={12} />{property.bedrooms} dorm.</span>
+                          )}
+                          {property.bathrooms != null && (
+                            <span className="flex items-center gap-1"><Bath size={12} />{property.bathrooms} baño{property.bathrooms !== 1 ? "s" : ""}</span>
+                          )}
+                          {property.hasGarage && (
+                            <span className="flex items-center gap-1"><Car size={12} />Cochera{property.garages && property.garages > 1 ? ` x${property.garages}` : ""}</span>
+                          )}
                         </div>
                       )}
                     </div>

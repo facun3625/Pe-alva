@@ -1,13 +1,14 @@
 import React from "react";
 import { Heart } from "lucide-react";
 import { getSession } from "@/lib/auth";
+import { getSiteConfig } from "@/lib/config";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import FavoritosContent from "@/components/FavoritosContent";
 import CompareBar from "@/components/CompareBar";
 
 export default async function FavoritosPage() {
-  const session = await getSession();
+  const [session, siteConfig] = await Promise.all([getSession(), getSiteConfig()]);
 
   return (
     <div className="flex flex-col min-h-screen bg-white text-[#111]">
@@ -34,7 +35,7 @@ export default async function FavoritosPage() {
         </div>
       </section>
 
-      <Footer />
+      <Footer siteConfig={siteConfig} />
       <CompareBar />
     </div>
   );

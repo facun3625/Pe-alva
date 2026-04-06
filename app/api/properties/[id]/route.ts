@@ -14,7 +14,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     const body = await req.json();
 
     const data: any = {};
-    const fields = ["title","description","price","city","address","lat","lng","imageUrl","images","videoUrl","type","propertyType","bedrooms","bathrooms","hasGarage","garages","coveredArea","totalArea","featured","published"];
+    const fields = ["title","description","price","city","address","lat","lng","imageUrl","images","videoUrl","type","propertyType","bedrooms","bathrooms","hasGarage","garages","coveredArea","totalArea","featured","published","currency","pricePerMonth"];
 
     for (const f of fields) {
       if (!(f in body)) continue;
@@ -23,7 +23,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       else if (["bedrooms","bathrooms","garages"].includes(f)) data[f] = v ? parseInt(v) : null;
       else if (["coveredArea","totalArea"].includes(f)) data[f] = v ? parseFloat(v) : null;
       else if (["lat","lng"].includes(f)) data[f] = v !== "" && v !== null && v !== undefined ? parseFloat(v) : null;
-      else if (["hasGarage","featured","published"].includes(f)) data[f] = Boolean(v);
+      else if (["hasGarage","featured","published","pricePerMonth"].includes(f)) data[f] = Boolean(v);
       else data[f] = v ?? null;
     }
 

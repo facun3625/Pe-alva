@@ -13,6 +13,8 @@ import {
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { getSession } from "@/lib/auth";
+import { getSiteConfig } from "@/lib/config";
+import { getContent } from "@/lib/content";
 
 export const metadata = {
   title: "Nosotros — Penalva Inmobiliaria",
@@ -79,7 +81,21 @@ const TEAM = [
 ];
 
 export default async function NosotrosPage() {
-  const session = await getSession();
+  const [session, siteConfig, heroTitulo, heroSubtitulo, empresaTitulo, empresaP1, empresaP2, empresaP3, empresaQuote, horario, valoresTitulo, equipoTitulo, contactoTexto] = await Promise.all([
+    getSession(),
+    getSiteConfig(),
+    getContent("nosotros_hero_titulo"),
+    getContent("nosotros_hero_subtitulo"),
+    getContent("nosotros_empresa_titulo"),
+    getContent("nosotros_empresa_p1"),
+    getContent("nosotros_empresa_p2"),
+    getContent("nosotros_empresa_p3"),
+    getContent("nosotros_empresa_quote"),
+    getContent("nosotros_horario"),
+    getContent("nosotros_valores_titulo"),
+    getContent("nosotros_equipo_titulo"),
+    getContent("nosotros_contacto_texto"),
+  ]);
   return (
     <div className="flex flex-col min-h-screen bg-white text-[#111]">
 
@@ -99,10 +115,10 @@ export default async function NosotrosPage() {
               La Empresa
             </p>
             <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight">
-              Nosotros
+              {heroTitulo}
             </h1>
             <p className="mt-3 text-white/50 text-[14px] max-w-md leading-relaxed">
-              Más de 20 años construyendo confianza en el mercado inmobiliario de Santa Fe.
+              {heroSubtitulo}
             </p>
           </div>
         </div>
@@ -139,26 +155,20 @@ export default async function NosotrosPage() {
                 Quiénes somos
               </p>
               <h2 className="text-3xl md:text-[32px] font-bold text-[#111] mb-6 leading-tight">
-                Peñalva Inmobiliaria<br />de P+P SRL
+                {empresaTitulo.split("\n").map((line: string, i: number) => (
+                  <span key={i}>{line}{i < empresaTitulo.split("\n").length - 1 && <br />}</span>
+                ))}
               </h2>
               <div className="space-y-4 text-[15px] text-gray-600 leading-relaxed">
-                <p>
-                  La empresa <strong className="text-[#111]">Peñalva Inmobiliaria de P+P SRL</strong>, con más de veinte años de trayectoria en su actividad, justifica su permanencia en el mercado al brindar responsabilidad, honestidad y cumplimiento.
-                </p>
-                <p>
-                  Contamos para este fin con profesionales de reconocido prestigio y personal idóneo para asesorarlo en una buena defensa de su patrimonio.
-                </p>
-                <p>
-                  La trayectoria ha hecho de nuestro nombre un sinónimo de seriedad, confiabilidad y respeto por el cliente.
-                </p>
-                <p className="text-brand-orange font-semibold italic">
-                  "Su consulta no es molestia, nos fortalece..."
-                </p>
+                <p>{empresaP1}</p>
+                <p>{empresaP2}</p>
+                <p>{empresaP3}</p>
+                <p className="text-brand-orange font-semibold italic">{empresaQuote}</p>
               </div>
 
               <div className="mt-8 flex items-center gap-3 text-[13px] text-gray-500">
                 <Clock size={15} className="text-brand-orange shrink-0" />
-                <span>Horario de atención: Lunes a Viernes, 08:00 a 17:00 hs.</span>
+                <span>{horario}</span>
               </div>
             </div>
 
@@ -186,7 +196,7 @@ export default async function NosotrosPage() {
               Nuestros pilares
             </p>
             <h2 className="text-3xl md:text-[32px] font-bold text-[#111]">
-              Lo que nos define
+              {valoresTitulo}
             </h2>
           </div>
 
@@ -218,7 +228,7 @@ export default async function NosotrosPage() {
               Staff
             </p>
             <h2 className="text-3xl md:text-[32px] font-bold text-[#111]">
-              Nuestro equipo
+              {equipoTitulo}
             </h2>
           </div>
 
@@ -264,18 +274,18 @@ export default async function NosotrosPage() {
             ¿Hablamos?
           </h2>
           <p className="text-gray-500 text-[15px] leading-relaxed mb-10">
-            Estamos disponibles de lunes a viernes para asesorarte en la compra, venta o alquiler de tu propiedad.
+            {contactoTexto}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
-              href="tel:+543424565000"
+              href={`tel:${(siteConfig.phone ?? "").replace(/[^0-9+]/g, "")}`}
               className="flex items-center gap-2.5 bg-brand-orange text-white font-bold text-[13px] uppercase tracking-wider px-8 py-4 rounded-lg hover:bg-orange-700 transition-colors"
             >
               <Phone size={15} />
-              +54 342 456-5000
+              {siteConfig.phone}
             </a>
             <a
-              href="mailto:administracion@penalvainmobiliaria.com.ar"
+              href={`mailto:${siteConfig.email}`}
               className="flex items-center gap-2.5 bg-[#f0efed] text-[#111] font-bold text-[13px] uppercase tracking-wider px-8 py-4 rounded-lg hover:bg-gray-200 transition-colors"
             >
               <Mail size={15} />
@@ -284,12 +294,12 @@ export default async function NosotrosPage() {
           </div>
           <div className="mt-8 flex items-center justify-center gap-2 text-[13px] text-gray-400">
             <MapPin size={13} className="text-brand-orange" />
-            <span>Eva Perón 2845 — Santa Fe, Argentina</span>
+            <span>{siteConfig.address}</span>
           </div>
         </div>
       </section>
 
-      <Footer />
+      <Footer siteConfig={siteConfig} />
     </div>
   );
 }

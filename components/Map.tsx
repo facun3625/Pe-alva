@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import { formatPrice } from "@/lib/formatPrice";
 
 // Marcador naranja personalizado
 const customIcon = L.divIcon({
@@ -29,6 +30,8 @@ interface Property {
   lat: number | null;
   lng: number | null;
   price: number;
+  currency?: string;
+  pricePerMonth?: boolean;
   address: string;
   city?: string;
   imageUrl?: string | null;
@@ -114,7 +117,7 @@ export default function PropertyMap({ properties, fullHeight }: MapProps) {
                   {/* Info */}
                   <div style={{ padding: "12px 14px 14px" }}>
                     <div style={{ color: "#df691a", fontWeight: 700, fontSize: 18, marginBottom: 4 }}>
-                      USD {prop.price.toLocaleString("es-AR")}
+                      {formatPrice(prop.price, prop.currency, prop.pricePerMonth)}
                     </div>
                     <div style={{ fontWeight: 600, fontSize: 13, color: "#111", marginBottom: 4, lineHeight: 1.3 }}>
                       {prop.title}

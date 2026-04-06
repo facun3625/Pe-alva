@@ -73,6 +73,7 @@ export default function NuevaPropiedadPage() {
     hasGarage: false, garages: "",
     coveredArea: "", totalArea: "",
     videoUrl: "", featured: false,
+    currency: "USD", pricePerMonth: false,
   });
   const [images, setImages] = useState<string[]>([]);
   const [featuredIndex, setFeaturedIndex] = useState(0);
@@ -184,8 +185,29 @@ export default function NuevaPropiedadPage() {
                 <textarea required name="description" value={formData.description} onChange={handleChange} rows={5} placeholder="Describe las características principales..." className={`${f} resize-none`} />
               </div>
               <div className="space-y-1.5">
-                <label className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Precio (USD)</label>
-                <input required type="number" name="price" value={formData.price} onChange={handleChange} placeholder="Ej: 150000" className={f} />
+                <label className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Precio</label>
+                <div className="flex gap-2">
+                  <div className="flex rounded-lg border border-gray-200 overflow-hidden text-[12px] font-semibold shrink-0">
+                    {(["USD", "ARS", "CONSULTAR"] as const).map((cur) => (
+                      <button key={cur} type="button" onClick={() => setFormData((p) => ({ ...p, currency: cur }))}
+                        className={`px-3 py-2 transition-colors ${formData.currency === cur ? "bg-brand-orange text-white" : "bg-white text-gray-400 hover:text-brand-orange"}`}>
+                        {cur === "CONSULTAR" ? "Consultar" : cur}
+                      </button>
+                    ))}
+                  </div>
+                  {formData.currency !== "CONSULTAR" && (
+                    <input required type="number" name="price" value={formData.price} onChange={handleChange} placeholder="Ej: 150000" className={f} />
+                  )}
+                </div>
+                {formData.currency !== "CONSULTAR" && (
+                  <button type="button" onClick={() => setFormData((p) => ({ ...p, pricePerMonth: !p.pricePerMonth }))}
+                    className={`flex items-center gap-2 mt-1 px-3 py-1.5 rounded-lg border text-[12px] font-medium transition-all ${formData.pricePerMonth ? "border-brand-orange bg-orange-50 text-brand-orange" : "border-gray-200 bg-white text-gray-400 hover:border-gray-300"}`}>
+                    <div className={`w-3.5 h-3.5 rounded border-2 flex items-center justify-center shrink-0 ${formData.pricePerMonth ? "bg-brand-orange border-brand-orange" : "border-gray-300"}`}>
+                      {formData.pricePerMonth && <span className="text-white text-[8px] font-bold leading-none">✓</span>}
+                    </div>
+                    Precio por mes
+                  </button>
+                )}
               </div>
             </div>
 

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { formatPrice } from "@/lib/formatPrice";
 import {
   Building2,
   Plus,
@@ -121,7 +122,7 @@ export default function AdminDashboard() {
                   </div>
                 </div>
                 <div className="text-right shrink-0">
-                  <p className="text-[13px] font-semibold text-brand-orange">USD {p.price.toLocaleString("es-AR")}</p>
+                  <p className="text-[13px] font-semibold text-brand-orange">{formatPrice(p.price, p.currency, p.pricePerMonth)}</p>
                   <span className={`text-[10px] uppercase font-medium px-2 py-0.5 rounded ${p.type === "Venta" ? "bg-blue-50 text-blue-500" : "bg-emerald-50 text-emerald-500"}`}>
                     {p.type}
                   </span>

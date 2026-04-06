@@ -1,6 +1,7 @@
 import React from "react";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
+import { getSiteConfig } from "@/lib/config";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import MapaView from "@/components/MapaView";
@@ -26,12 +27,13 @@ export default async function MapaPage({ searchParams }: Props) {
     if (!isNaN(n)) where.bedrooms = n === 5 ? { gte: 5 } : n;
   }
 
-  const [properties, operations, cities, propertyTypes, session] = await Promise.all([
+  const [properties, operations, cities, propertyTypes, session, siteConfig] = await Promise.all([
     prisma.property.findMany({ where, orderBy: { createdAt: "desc" } }),
     prisma.operationType.findMany({ orderBy: { order: "asc" } }),
     prisma.city.findMany({ orderBy: { order: "asc" } }),
     prisma.propertyType.findMany({ orderBy: { order: "asc" } }),
     getSession(),
+    getSiteConfig(),
   ]);
 
   return (
@@ -47,7 +49,7 @@ export default async function MapaPage({ searchParams }: Props) {
         initial={{ ciudad, tipo, operacion, dormitorios }}
       />
 
-      <Footer />
+      <Footer siteConfig={siteConfig} />
     </div>
   );
 }

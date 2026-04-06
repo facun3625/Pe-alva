@@ -2,11 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { Heart, MapPin, Bed, Trash2 } from "lucide-react";
+import { formatPrice } from "@/lib/formatPrice";
 
 interface Property {
   id: string;
   title: string;
   price: number;
+  currency?: string;
+  pricePerMonth?: boolean;
   city: string;
   address: string;
   imageUrl?: string | null;
@@ -32,6 +35,7 @@ export default function FavoritosContent() {
     const next = ids.filter((i) => i !== id);
     localStorage.setItem("penalva_favs", JSON.stringify(next));
     setProperties((prev) => prev.filter((p) => p.id !== id));
+    window.dispatchEvent(new Event("favs-update"));
   };
 
   if (loading) return (
@@ -73,7 +77,7 @@ export default function FavoritosContent() {
             <div className="p-5">
               <div className="flex items-start justify-between mb-1.5">
                 <div className="text-brand-orange font-bold text-xl">
-                  USD {property.price.toLocaleString("es-AR")}
+                  {formatPrice(property.price, property.currency, property.pricePerMonth)}
                 </div>
                 <span className="text-[10px] font-medium uppercase tracking-wide text-gray-400 bg-gray-100 px-2 py-0.5 rounded">
                   {property.propertyType}
