@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { createAuditLog } from "@/lib/audit";
 
 export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -28,6 +29,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     }
 
     const property = await prisma.property.update({ where: { id }, data });
+    await createAuditLog("UPDATE", "Property", property.id, { title: property.title });
     return NextResponse.json(property);
   } catch (e: any) {
     console.error("PATCH property error:", e);
@@ -38,5 +40,6 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 export async function DELETE(_: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   await prisma.property.delete({ where: { id } });
+  await createAuditLog("DELETE", "Property", id);
   return NextResponse.json({ ok: true });
 }

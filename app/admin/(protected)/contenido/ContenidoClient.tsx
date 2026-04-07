@@ -20,6 +20,7 @@ const PAGE_LABELS: Record<string, string> = {
   home: "Inicio",
   nosotros: "Nosotros",
   tasacion: "Tasación",
+  footer: "Footer",
 };
 
 export default function ContenidoClient({ blocks, saveBlock }: Props) {

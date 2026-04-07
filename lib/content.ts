@@ -19,6 +19,14 @@ export const CONTENT_DEFAULTS: Record<string, { label: string; page: string; mul
   nosotros_equipo_titulo:    { page: "nosotros", label: "Equipo — Título", multiline: false, value: "Nuestro equipo" },
   nosotros_contacto_texto:   { page: "nosotros", label: "Contacto — Texto", multiline: true, value: "Estamos disponibles de lunes a viernes para asesorarte en la compra, venta o alquiler de tu propiedad." },
 
+  // FOOTER
+  footer_tagline:       { page: "footer", label: "Tagline bajo el logo", multiline: false, value: "Más de 20 años de trayectoria en Santa Fe, garantizando seriedad, confianza y resultados reales." },
+  footer_col2_titulo:   { page: "footer", label: "Columna 2 — Título", multiline: false, value: "¿Desea vender o alquilar?" },
+  footer_col2_texto:    { page: "footer", label: "Columna 2 — Texto", multiline: true, value: "Contamos con un equipo altamente especializado y con amplio conocimiento del mercado inmobiliario capacitado para realizar una real y exacta tasación de su inmueble. Nuestro interés es brindarle el mejor servicio para su mejor beneficio." },
+  footer_col2_cta:      { page: "footer", label: "Columna 2 — CTA", multiline: false, value: "Complete el formulario y a la brevedad lo contactaremos personalmente." },
+  footer_cta_titulo:    { page: "footer", label: "Banda CTA — Título", multiline: false, value: "Hablemos hoy." },
+  footer_cta_subtitulo: { page: "footer", label: "Banda CTA — Subtítulo", multiline: false, value: "¿Querés vender o alquilar?" },
+
   // TASACIÓN
   tasacion_hero_titulo:      { page: "tasacion", label: "Hero — Título", multiline: false, value: "Tasación de Propiedades" },
   tasacion_hero_subtitulo:   { page: "tasacion", label: "Hero — Subtítulo", multiline: false, value: "Conocé el valor real de tu propiedad con un informe profesional respaldado por el mercado." },

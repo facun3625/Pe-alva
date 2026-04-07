@@ -1,5 +1,6 @@
 import React from "react";
 import { Phone, Mail, MapPin, Facebook, Instagram } from "lucide-react";
+import { getContent } from "@/lib/content";
 
 interface SiteConfig {
   facebook?: string | null;
@@ -10,13 +11,22 @@ interface SiteConfig {
   address?: string | null;
 }
 
-export default function Footer({ siteConfig }: { siteConfig: SiteConfig }) {
+export default async function Footer({ siteConfig }: { siteConfig: SiteConfig }) {
   const phone = siteConfig?.phone || "";
   const whatsapp = siteConfig?.whatsapp || "";
   const email = siteConfig?.email || "";
   const address = siteConfig?.address || "";
   const facebook = siteConfig?.facebook || "";
   const instagram = siteConfig?.instagram || "";
+
+  const [tagline, col2Titulo, col2Texto, col2Cta, ctaTitulo, ctaSubtitulo] = await Promise.all([
+    getContent("footer_tagline"),
+    getContent("footer_col2_titulo"),
+    getContent("footer_col2_texto"),
+    getContent("footer_col2_cta"),
+    getContent("footer_cta_titulo"),
+    getContent("footer_cta_subtitulo"),
+  ]);
 
   return (
     <footer id="contacto" className="bg-[#262522] text-white">
@@ -25,8 +35,8 @@ export default function Footer({ siteConfig }: { siteConfig: SiteConfig }) {
       <div className="border-b border-white/[0.07]">
         <div className="max-w-7xl mx-auto px-8 md:px-12 lg:px-16 py-14 flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
-            <p className="text-white/35 text-[10px] uppercase tracking-[0.4em] font-semibold mb-1">¿Querés vender o alquilar?</p>
-            <h3 className="text-2xl md:text-3xl font-bold text-white">Hablemos hoy.</h3>
+            <p className="text-white/35 text-[10px] uppercase tracking-[0.4em] font-semibold mb-1">{ctaSubtitulo}</p>
+            <h3 className="text-2xl md:text-3xl font-bold text-white">{ctaTitulo}</h3>
           </div>
           <div className="flex items-center gap-3 shrink-0">
             {phone && (
@@ -63,7 +73,7 @@ export default function Footer({ siteConfig }: { siteConfig: SiteConfig }) {
           <div>
             <img src="/logo.png" alt="Penalva Inmobiliaria" className="h-10 w-auto object-contain mb-5 brightness-0 invert opacity-75" />
             <p className="text-[13px] text-white/30 leading-relaxed mb-6 max-w-xs">
-              Más de 20 años de trayectoria en Santa Fe, garantizando seriedad, confianza y resultados reales.
+              {tagline}
             </p>
             <div className="flex gap-4">
               {facebook && (
@@ -81,13 +91,9 @@ export default function Footer({ siteConfig }: { siteConfig: SiteConfig }) {
 
           {/* Col 2 — Texto */}
           <div>
-            <h4 className="text-[10px] font-bold uppercase tracking-widest text-white/20 mb-5">¿Desea vender o alquilar?</h4>
-            <p className="text-[13px] text-white/40 leading-relaxed">
-              Contamos con un equipo altamente especializado y con amplio conocimiento del mercado inmobiliario capacitado para realizar una real y exacta tasación de su inmueble. Nuestro interés es brindarle el mejor servicio para su mejor beneficio.
-            </p>
-            <p className="mt-4 text-[13px] text-brand-orange/80">
-              Complete el formulario y a la brevedad lo contactaremos personalmente.
-            </p>
+            <h4 className="text-[10px] font-bold uppercase tracking-widest text-white/20 mb-5">{col2Titulo}</h4>
+            <p className="text-[13px] text-white/40 leading-relaxed">{col2Texto}</p>
+            <p className="mt-4 text-[13px] text-brand-orange/80">{col2Cta}</p>
           </div>
 
           {/* Col 3 — Contacto */}

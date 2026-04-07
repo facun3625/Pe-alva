@@ -13,6 +13,8 @@ import {
   CheckCircle,
   XCircle,
   Loader2,
+  Search,
+  Image,
 } from "lucide-react";
 
 type ToastType = "success" | "error" | null;
@@ -57,6 +59,8 @@ export default function ConfigPage() {
     phone: "",
     email: "",
     address: "",
+    metaDescription: "",
+    ogImage: "",
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -235,6 +239,52 @@ export default function ConfigPage() {
                   />
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* SEO */}
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+          <div className="px-6 py-4 border-b border-gray-100 bg-gray-50/50">
+            <h2 className="text-[14px] font-semibold text-[#111]">SEO</h2>
+            <p className="text-[12px] text-gray-400 mt-0.5">Se usa en el inicio, nosotros y otras páginas generales</p>
+          </div>
+          <div className="p-6 space-y-4">
+            <div>
+              <label className="block text-[12px] font-medium text-gray-500 mb-1.5 uppercase tracking-wider">
+                Meta description del sitio
+              </label>
+              <div className="relative">
+                <Search size={15} className="absolute left-3 top-3 text-gray-400" />
+                <textarea
+                  value={config.metaDescription || ""}
+                  onChange={(e) => setConfig({ ...config, metaDescription: e.target.value })}
+                  rows={3}
+                  maxLength={160}
+                  className="w-full bg-[#f8f8f9] border border-transparent focus:border-brand-orange/40 focus:bg-white rounded-lg py-2.5 pl-9 pr-4 text-[13px] outline-none transition-all resize-none"
+                  placeholder="Más de 20 años de trayectoria en compra, venta y alquiler de propiedades en Santa Fe..."
+                />
+              </div>
+              <p className="text-[11px] text-gray-300 mt-1">{(config.metaDescription || "").length}/160 caracteres — lo ideal es entre 120 y 160</p>
+            </div>
+            <div>
+              <label className="block text-[12px] font-medium text-gray-500 mb-1.5 uppercase tracking-wider">
+                Imagen por defecto (og:image)
+              </label>
+              <div className="relative">
+                <Image size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <input
+                  type="text"
+                  value={config.ogImage || ""}
+                  onChange={(e) => setConfig({ ...config, ogImage: e.target.value })}
+                  className="w-full bg-[#f8f8f9] border border-transparent focus:border-brand-orange/40 focus:bg-white rounded-lg py-2.5 pl-9 pr-4 text-[13px] outline-none transition-all"
+                  placeholder="https://tudominio.com/og-image.jpg"
+                />
+              </div>
+              <p className="text-[11px] text-gray-300 mt-1">Aparece cuando alguien comparte el sitio en redes. Tamaño recomendado: 1200×630px</p>
+              {config.ogImage && (
+                <img src={config.ogImage} alt="og preview" className="mt-3 rounded-lg border border-gray-100 h-28 object-cover" />
+              )}
             </div>
           </div>
         </div>

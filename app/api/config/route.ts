@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { createAuditLog } from "@/lib/audit";
 
 export async function GET() {
   try {
@@ -39,6 +40,8 @@ export async function POST(req: Request) {
         phone: data.phone,
         email: data.email,
         address: data.address,
+        metaDescription: data.metaDescription || null,
+        ogImage: data.ogImage || null,
       },
       create: {
         id: "singleton",
@@ -48,6 +51,8 @@ export async function POST(req: Request) {
         phone: data.phone,
         email: data.email,
         address: data.address,
+        metaDescription: data.metaDescription || null,
+        ogImage: data.ogImage || null,
       },
     });
 

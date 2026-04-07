@@ -13,7 +13,8 @@
       "Bash(done)",
       "Bash(python3 -c \":*)",
       "Bash(ls /Users/facundoarteagasola/Documents/penalva/app/admin/\\\\\\(protected\\\\\\)/)",
-      "Bash(openssl rand:*)"
+      "Bash(openssl rand:*)",
+      "Bash(DATABASE_URL=\"file:./dev.db\" npx prisma db push)"
     ],
     "additionalDirectories": [
       "/Users/facundoarteagasola/.claude/projects/-Users-facundoarteagasola-Documents-penalva",

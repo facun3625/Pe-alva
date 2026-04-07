@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import prisma from "@/lib/prisma";
 import { CONTENT_DEFAULTS, getAllContent } from "@/lib/content";
+import { createAuditLog } from "@/lib/audit";
 import ContenidoClient from "./ContenidoClient";
 
 async function saveBlock(key: string, value: string) {
@@ -18,9 +19,13 @@ async function saveBlock(key: string, value: string) {
       multiline: CONTENT_DEFAULTS[key]?.multiline ?? false,
     },
   });
+  await createAuditLog("UPDATE", "ContentBlock", key, { value });
   revalidatePath("/");
   revalidatePath("/nosotros");
   revalidatePath("/tasacion");
+  revalidatePath("/propiedades");
+  revalidatePath("/mapa");
+  revalidatePath("/favoritos");
 }
 
 export default async function ContenidoPage() {

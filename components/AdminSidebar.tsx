@@ -16,6 +16,9 @@ import {
   ExternalLink,
   BarChart3,
   Star,
+  User,
+  ShieldCheck,
+  History,
 } from "lucide-react";
 
 const NAV = [
@@ -42,6 +45,14 @@ const NAV = [
     items: [
       { label: "Textos del sitio", href: "/admin/contenido", icon: FileText },
       { label: "Configuración", href: "/admin/configuracion", icon: Settings },
+    ],
+  },
+  {
+    section: "Administración",
+    items: [
+      { label: "Mi Perfil", href: "/admin/perfil", icon: User },
+      { label: "Usuarios", href: "/admin/usuarios", icon: ShieldCheck },
+      { label: "Logs de Actividad", href: "/admin/logs", icon: History },
     ],
   },
 ];
