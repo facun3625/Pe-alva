@@ -103,7 +103,7 @@ export default function NuevaPropiedadPage() {
     setIsSearching(true);
     try {
       const q = encodeURIComponent(`${query}, Santa Fe, Argentina`);
-      const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${q}&limit=8&addressdetails=1&viewbox=-60.785,-31.571,-60.627,-31.696&bounded=1`, { headers: { "User-Agent": "PenalvaInmobiliaria/1.0" } });
+      const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${q}&limit=8&addressdetails=1&countrycodes=ar`, { headers: { "User-Agent": "PenalvaInmobiliaria/1.0" } });
       setSuggestions(await res.json()); setShowSuggestions(true);
     } catch { } finally { setIsSearching(false); }
   };
