@@ -12,7 +12,8 @@
       "Bash(sed -i '' 's|<a href=\"\"/tasacion\"\" className=\"\"px-5 py-3 hover:text-white transition-colors\"\">Tasación</a>\\\\n              <span className=\"\"w-px h-3.5 bg-white/25\"\" />\\\\n              <a href=\"\"#contacto\"\"|<a href=\"\"/tasacion\"\" className=\"\"px-5 py-3 hover:text-white transition-colors\"\">Tasación</a>\\\\n              <span className=\"\"w-px h-3.5 bg-white/25\"\" />\\\\n              <a href=\"\"/mapa\"\" className=\"\"px-5 py-3 hover:text-white transition-colors\"\">Mapa</a>\\\\n              <span className=\"\"w-px h-3.5 bg-white/25\"\" />\\\\n              <a href=\"\"#contacto\"\"|g' \"$f\")",
       "Bash(done)",
       "Bash(python3 -c \":*)",
-      "Bash(ls /Users/facundoarteagasola/Documents/penalva/app/admin/\\\\\\(protected\\\\\\)/)"
+      "Bash(ls /Users/facundoarteagasola/Documents/penalva/app/admin/\\\\\\(protected\\\\\\)/)",
+      "Bash(openssl rand:*)"
     ],
     "additionalDirectories": [
       "/Users/facundoarteagasola/.claude/projects/-Users-facundoarteagasola-Documents-penalva",

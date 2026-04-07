@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Heart, MapPin, Bed, Trash2 } from "lucide-react";
+import { Heart, MapPin, Bed, Bath, Car, Trash2 } from "lucide-react";
 import { formatPrice } from "@/lib/formatPrice";
+import CompareButton from "@/components/CompareButton";
 
 interface Property {
   id: string;
@@ -16,6 +17,9 @@ interface Property {
   type: string;
   propertyType: string;
   bedrooms?: number | null;
+  bathrooms?: number | null;
+  hasGarage?: boolean;
+  garages?: number | null;
 }
 
 export default function FavoritosContent() {
@@ -54,13 +58,16 @@ export default function FavoritosContent() {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {properties.map((property) => (
         <div key={property.id} className="group bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 relative">
-          <button
-            onClick={() => remove(property.id)}
-            className="absolute top-3 right-3 z-10 bg-white/90 hover:bg-red-50 p-2 rounded-full shadow transition-all"
-            title="Quitar de favoritos"
-          >
-            <Trash2 size={13} className="text-red-400" />
-          </button>
+          <div className="absolute top-3 right-3 z-10 flex gap-1.5">
+            <CompareButton propertyId={property.id} compact />
+            <button
+              onClick={() => remove(property.id)}
+              className="bg-white/90 hover:bg-red-50 p-2 rounded-full shadow transition-all"
+              title="Quitar de favoritos"
+            >
+              <Trash2 size={13} className="text-red-400" />
+            </button>
+          </div>
           <a href={`/propiedad/${property.id}`} className="block">
             <div className="relative h-48 overflow-hidden">
               <img
@@ -88,10 +95,17 @@ export default function FavoritosContent() {
                 <MapPin size={11} />
                 <span className="truncate">{property.city}, {property.address}</span>
               </div>
-              {property.bedrooms != null && (
-                <div className="flex items-center gap-1.5 text-gray-400 text-xs mt-3 pt-3 border-t border-gray-100">
-                  <Bed size={12} />
-                  <span>{property.bedrooms} dormitorio{property.bedrooms !== 1 ? "s" : ""}</span>
+              {(property.bedrooms != null || property.bathrooms != null || property.hasGarage) && (
+                <div className="flex items-center gap-3 text-gray-400 text-xs mt-3 pt-3 border-t border-gray-100">
+                  {property.bedrooms != null && (
+                    <span className="flex items-center gap-1"><Bed size={12} />{property.bedrooms} dorm.</span>
+                  )}
+                  {property.bathrooms != null && (
+                    <span className="flex items-center gap-1"><Bath size={12} />{property.bathrooms} baño{property.bathrooms !== 1 ? "s" : ""}</span>
+                  )}
+                  {property.hasGarage && (
+                    <span className="flex items-center gap-1"><Car size={12} />Cochera{property.garages && property.garages > 1 ? ` x${property.garages}` : ""}</span>
+                  )}
                 </div>
               )}
             </div>

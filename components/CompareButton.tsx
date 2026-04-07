@@ -6,7 +6,7 @@ import { GitCompare } from "lucide-react";
 const MAX = 3;
 const KEY = "penalva_compare";
 
-export default function CompareButton({ propertyId }: { propertyId: string }) {
+export default function CompareButton({ propertyId, compact }: { propertyId: string; compact?: boolean }) {
   const [added, setAdded] = useState(false);
 
   useEffect(() => {
@@ -29,6 +29,22 @@ export default function CompareButton({ propertyId }: { propertyId: string }) {
       window.dispatchEvent(new Event("compare-update"));
     }
   };
+
+  if (compact) {
+    return (
+      <button
+        onClick={toggle}
+        title={added ? "Quitar de comparación" : "Agregar a comparar"}
+        className={`p-2 rounded-full shadow transition-all ${
+          added
+            ? "bg-[#262522] text-white"
+            : "bg-white/90 hover:bg-gray-100 text-gray-400 hover:text-gray-600"
+        }`}
+      >
+        <GitCompare size={13} />
+      </button>
+    );
+  }
 
   return (
     <button

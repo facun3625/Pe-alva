@@ -53,7 +53,7 @@ export default function AdminSidebar() {
 
   const [pendingContacts, setPendingContacts] = useState(0);
 
-  useEffect(() => {
+  const fetchCounts = () => {
     Promise.all([
       fetch("/api/tasaciones").then((r) => r.json()),
       fetch("/api/contacts").then((r) => r.json()),
@@ -63,6 +63,12 @@ export default function AdminSidebar() {
         setPendingContacts((con as { status: string }[]).filter((r) => r.status === "pending").length);
       })
       .catch(() => {});
+  };
+
+  useEffect(() => {
+    fetchCounts();
+    window.addEventListener("admin-data-changed", fetchCounts);
+    return () => window.removeEventListener("admin-data-changed", fetchCounts);
   }, [pathname]);
 
   const logout = async () => {

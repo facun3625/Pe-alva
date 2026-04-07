@@ -68,7 +68,7 @@ export default async function Home() {
       <Header active="/" isLoggedIn={!!session} />
 
       {/* ── HERO — split: buscador izq / imagen der ── */}
-      <section className="flex md:h-[260px]">
+      <section className="flex md:h-[340px]">
 
         {/* Izquierda — buscador 65% */}
         <div className="w-full md:w-[65%] bg-[#f0efed] flex flex-col justify-center py-6 md:py-0">

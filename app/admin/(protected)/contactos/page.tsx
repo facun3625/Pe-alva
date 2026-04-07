@@ -44,6 +44,8 @@ export default function ContactosPage() {
       });
   }, []);
 
+  const notify = () => window.dispatchEvent(new Event("admin-data-changed"));
+
   const updateStatus = async (id: string, status: string) => {
     await fetch(`/api/contacts/${id}`, {
       method: "PATCH",
@@ -51,6 +53,7 @@ export default function ContactosPage() {
       body: JSON.stringify({ status, notes: notes[id] ?? null }),
     });
     setContacts((prev) => prev.map((c) => c.id === id ? { ...c, status: status as any } : c));
+    notify();
   };
 
   const saveNotes = async (id: string) => {
@@ -66,6 +69,7 @@ export default function ContactosPage() {
     if (!confirm("¿Eliminar este contacto?")) return;
     await fetch(`/api/contacts/${id}`, { method: "DELETE" });
     setContacts((prev) => prev.filter((c) => c.id !== id));
+    notify();
   };
 
   const counts = {

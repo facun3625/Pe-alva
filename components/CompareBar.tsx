@@ -1,17 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { X, GitCompare } from "lucide-react";
+import { X, GitCompare, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-interface Props {
-  propertyId?: string; // current property to highlight
-}
-
-export default function CompareBar({ propertyId }: Props) {
+export default function CompareBar({ propertyId }: { propertyId?: string }) {
   const router = useRouter();
   const [ids, setIds] = useState<string[]>([]);
   const [properties, setProperties] = useState<Record<string, { title: string; imageUrl?: string | null }>>({});
+  const [open, setOpen] = useState(false);
 
   const load = () => {
     const stored: string[] = JSON.parse(localStorage.getItem("penalva_compare") || "[]");
@@ -26,6 +23,7 @@ export default function CompareBar({ propertyId }: Props) {
         });
     } else {
       setProperties({});
+      setOpen(false);
     }
   };
 
@@ -38,73 +36,98 @@ export default function CompareBar({ propertyId }: Props) {
   const remove = (id: string) => {
     const next = ids.filter((i) => i !== id);
     localStorage.setItem("penalva_compare", JSON.stringify(next));
-    setIds(next);
+    window.dispatchEvent(new Event("compare-update"));
   };
 
   const clear = () => {
     localStorage.setItem("penalva_compare", "[]");
-    setIds([]);
+    window.dispatchEvent(new Event("compare-update"));
   };
 
   if (ids.length === 0) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-[#262522] border-t border-white/10 shadow-2xl">
-      <div className="max-w-7xl mx-auto px-3 md:px-6 py-2 md:py-3">
-        {/* Mobile layout */}
-        <div className="flex md:hidden items-center justify-between gap-2">
-          <div className="flex items-center gap-1.5">
-            <GitCompare size={13} className="text-brand-orange" />
-            <span className="text-white text-[11px] font-semibold">{ids.length}/3 para comparar</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <button onClick={clear} className="text-white/40 text-[11px]">Limpiar</button>
-            {ids.length >= 2 && (
-              <button
-                onClick={() => router.push(`/comparar?ids=${ids.join(",")}`)}
-                className="bg-brand-orange text-white text-[11px] font-bold uppercase px-3 py-1.5 rounded-lg"
-              >
-                Comparar
-              </button>
-            )}
-          </div>
-        </div>
+    <div className="fixed bottom-6 left-6 z-50 flex flex-col items-start gap-2">
 
-        {/* Desktop layout */}
-        <div className="hidden md:flex items-center gap-4">
-          <div className="flex items-center gap-2 shrink-0">
-            <GitCompare size={15} className="text-brand-orange" />
-            <span className="text-white text-[12px] font-semibold uppercase tracking-wider">Comparar</span>
-            <span className="text-white/40 text-[12px]">({ids.length}/3)</span>
+      {/* Panel expandido */}
+      {open && (
+        <div
+          className="rounded-2xl overflow-hidden shadow-2xl flex flex-col"
+          style={{ width: 260, background: "#1a1816", border: "1px solid #2e2c2a" }}
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: "1px solid #2e2c2a" }}>
+            <div className="flex items-center gap-2">
+              <GitCompare size={14} className="text-brand-orange" />
+              <span className="text-white text-[12px] font-bold uppercase tracking-wider">Comparar</span>
+              <span className="text-white/30 text-[11px]">{ids.length}/3</span>
+            </div>
+            <button onClick={() => setOpen(false)} className="text-white/30 hover:text-white transition-colors">
+              <X size={14} />
+            </button>
           </div>
-          <div className="flex items-center gap-3 flex-1 overflow-x-auto">
+
+          {/* Items */}
+          <div className="px-3 py-3 flex flex-col gap-2">
             {ids.map((id) => {
               const p = properties[id];
               return (
-                <div key={id} className="flex items-center gap-2 bg-white/10 rounded-lg px-3 py-1.5 shrink-0">
-                  {p?.imageUrl && <img src={p.imageUrl} className="w-8 h-8 rounded object-cover" alt="" />}
-                  <span className="text-white text-[12px] max-w-[140px] truncate">{p?.title ?? "Cargando..."}</span>
-                  <button onClick={() => remove(id)} className="text-white/40 hover:text-white transition-colors ml-1"><X size={13} /></button>
+                <div key={id} className="flex items-center gap-2.5 rounded-xl px-3 py-2" style={{ background: "#2e2c2a" }}>
+                  {p?.imageUrl
+                    ? <img src={p.imageUrl} className="w-9 h-9 rounded-lg object-cover shrink-0" alt="" />
+                    : <div className="w-9 h-9 rounded-lg shrink-0" style={{ background: "#3a3836" }} />
+                  }
+                  <span className="text-white/80 text-[12px] flex-1 truncate leading-tight">{p?.title ?? "Cargando..."}</span>
+                  <button onClick={() => remove(id)} className="text-white/25 hover:text-white/60 transition-colors shrink-0">
+                    <X size={12} />
+                  </button>
                 </div>
               );
             })}
             {ids.length < 3 && (
-              <div className="flex items-center justify-center w-12 h-9 border border-dashed border-white/20 rounded-lg text-white/25 text-lg shrink-0">+</div>
+              <div className="flex items-center justify-center rounded-xl py-2 text-white/20 text-[12px] border border-dashed"
+                style={{ borderColor: "#3a3836" }}>
+                + Agregar otra
+              </div>
             )}
           </div>
-          <div className="flex items-center gap-3 shrink-0">
-            <button onClick={clear} className="text-white/40 hover:text-white text-[12px] transition-colors">Limpiar</button>
+
+          {/* Actions */}
+          <div className="px-3 pb-3 flex flex-col gap-2">
             {ids.length >= 2 && (
               <button
                 onClick={() => router.push(`/comparar?ids=${ids.join(",")}`)}
-                className="bg-brand-orange hover:bg-orange-700 text-white text-[12px] font-bold uppercase tracking-wider px-5 py-2 rounded-lg transition-colors"
+                className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-white text-[12px] font-bold uppercase tracking-wider transition-colors hover:bg-orange-700"
+                style={{ background: "#df691a" }}
               >
-                Comparar ahora
+                Comparar ahora <ArrowRight size={13} />
               </button>
             )}
+            <button onClick={clear} className="text-white/25 hover:text-white/50 text-[11px] text-center transition-colors">
+              Limpiar todo
+            </button>
           </div>
         </div>
-      </div>
+      )}
+
+      {/* Botón flotante */}
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="flex items-center gap-2.5 rounded-full shadow-lg transition-all hover:scale-105 pl-3 pr-4"
+        style={{ background: "#262522", border: "1px solid #3a3836", height: 48 }}
+      >
+        <div className="relative">
+          <GitCompare size={16} className="text-brand-orange" />
+          <span
+            className="absolute -top-2 -right-2 w-4 h-4 rounded-full flex items-center justify-center text-[9px] font-bold text-white"
+            style={{ background: "#df691a" }}
+          >
+            {ids.length}
+          </span>
+        </div>
+        <span className="text-white text-[12px] font-semibold">Comparar</span>
+      </button>
+
     </div>
   );
 }

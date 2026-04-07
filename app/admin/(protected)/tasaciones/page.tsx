@@ -45,6 +45,8 @@ export default function TasacionesPage() {
       });
   }, []);
 
+  const notify = () => window.dispatchEvent(new Event("admin-data-changed"));
+
   const updateStatus = async (id: string, status: string) => {
     await fetch(`/api/tasaciones/${id}`, {
       method: "PATCH",
@@ -52,6 +54,7 @@ export default function TasacionesPage() {
       body: JSON.stringify({ status, notes: notes[id] ?? null }),
     });
     setRequests((prev) => prev.map((r) => r.id === id ? { ...r, status: status as any } : r));
+    notify();
   };
 
   const saveNotes = async (id: string) => {
@@ -67,6 +70,7 @@ export default function TasacionesPage() {
     if (!confirm("¿Eliminar esta solicitud?")) return;
     await fetch(`/api/tasaciones/${id}`, { method: "DELETE" });
     setRequests((prev) => prev.filter((r) => r.id !== id));
+    notify();
   };
 
   const counts = {
