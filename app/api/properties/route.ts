@@ -66,7 +66,7 @@ export async function POST(request: Request) {
             data: {
                 title,
                 description,
-                price: parseFloat(price),
+                price: price ? parseFloat(price) : 0,
                 city,
                 address,
                 lat: lat ? parseFloat(lat) : null,

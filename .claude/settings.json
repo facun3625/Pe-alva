@@ -14,7 +14,8 @@
       "Bash(python3 -c \":*)",
       "Bash(ls /Users/facundoarteagasola/Documents/penalva/app/admin/\\\\\\(protected\\\\\\)/)",
       "Bash(openssl rand:*)",
-      "Bash(DATABASE_URL=\"file:./dev.db\" npx prisma db push)"
+      "Bash(DATABASE_URL=\"file:./dev.db\" npx prisma db push)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://app.penalvainmobiliaria.com.ar)"
     ],
     "additionalDirectories": [
       "/Users/facundoarteagasola/.claude/projects/-Users-facundoarteagasola-Documents-penalva",
