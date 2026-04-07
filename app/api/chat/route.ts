@@ -143,7 +143,7 @@ export async function POST(req: NextRequest) {
   let reply: string = data.choices?.[0]?.message?.content ?? "No se pudo obtener respuesta.";
 
   // Detectar token de contacto y guardar en DB
-  const tokenMatch = reply.match(/\[GUARDAR_CONTACTO:(\{.*?\})\]/s);
+  const tokenMatch = reply.match(/\[GUARDAR_CONTACTO:(\{[\s\S]*?\})\]/);
   if (tokenMatch) {
     try {
       const contactData = JSON.parse(tokenMatch[1]);
