@@ -212,7 +212,7 @@ export default async function PropertyPage({ params }: Props) {
                     Consultar por WhatsApp
                   </a>
                   <a
-                    href={`tel:${siteConfig.phone.replace(/[^0-9+]/g, "")}`}
+                    href={`tel:${(siteConfig.phone ?? "").replace(/[^0-9+]/g, "")}`}
                     className="flex items-center justify-center gap-2.5 w-full bg-[#262522] hover:bg-[#1a1917] text-white font-semibold text-[13px] uppercase tracking-wider py-3 rounded-lg transition-colors"
                   >
                     <Phone size={14} />
