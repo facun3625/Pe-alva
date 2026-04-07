@@ -158,7 +158,7 @@ export async function POST(req: NextRequest) {
       });
     } catch {}
     // Eliminar el token del mensaje mostrado al usuario
-    reply = reply.replace(/\[GUARDAR_CONTACTO:\{.*?\}\]/s, "").trimStart();
+    reply = reply.replace(/\[GUARDAR_CONTACTO:\{[\s\S]*?\}\]/, "").trimStart();
   }
 
   return NextResponse.json({ reply, contactSaved: !!tokenMatch });
