@@ -16,9 +16,11 @@ const NAV_LINKS = [
 interface Props {
   active?: string;
   isLoggedIn?: boolean;
+  facebook?: string;
+  instagram?: string;
 }
 
-export default function Header({ active, isLoggedIn }: Props) {
+export default function Header({ active, isLoggedIn, facebook, instagram }: Props) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -36,8 +38,8 @@ export default function Header({ active, isLoggedIn }: Props) {
             <span>+54 342 456-5000</span>
           </a>
           <div className="flex items-center gap-3 pl-3 border-l border-white/10">
-            <a href="#" aria-label="Facebook" className="hover:text-white transition-colors"><Facebook size={12} /></a>
-            <a href="#" aria-label="Instagram" className="hover:text-white transition-colors"><Instagram size={12} /></a>
+            {facebook && <a href={facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="hover:text-white transition-colors"><Facebook size={12} /></a>}
+            {instagram && <a href={instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="hover:text-white transition-colors"><Instagram size={12} /></a>}
           </div>
         </div>
       </div>

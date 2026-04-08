@@ -49,7 +49,7 @@ export default async function CompararPage({ searchParams }: Props) {
   return (
     <div className="flex flex-col min-h-screen bg-white text-[#111]">
 
-      <Header isLoggedIn={!!session} />
+      <Header isLoggedIn={!!session} facebook={siteConfig.facebook} instagram={siteConfig.instagram} />
 
       <section className="flex-1 py-12 bg-[#f8f6f2]">
         <div className="max-w-7xl mx-auto px-8 md:px-12 lg:px-16">

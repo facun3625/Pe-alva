@@ -99,7 +99,7 @@ export default async function NosotrosPage() {
   return (
     <div className="flex flex-col min-h-screen bg-white text-[#111]">
 
-      <Header active="/nosotros" isLoggedIn={!!session} />
+      <Header active="/nosotros" isLoggedIn={!!session} facebook={siteConfig.facebook} instagram={siteConfig.instagram} />
 
       {/* ── HERO ── */}
       <section className="relative h-[320px] overflow-hidden">

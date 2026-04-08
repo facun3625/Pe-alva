@@ -65,7 +65,7 @@ export default async function Home() {
   return (
     <div className="flex flex-col min-h-screen bg-white text-[#111]">
 
-      <Header active="/" isLoggedIn={!!session} />
+      <Header active="/" isLoggedIn={!!session} facebook={siteConfig.facebook} instagram={siteConfig.instagram} />
 
       {/* ── HERO — split: buscador izq / imagen der ── */}
       <section className="flex md:h-[340px]">

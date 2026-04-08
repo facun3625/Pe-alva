@@ -101,7 +101,7 @@ export default async function TasacionPage() {
   return (
     <div className="flex flex-col min-h-screen bg-white text-[#111]">
 
-      <Header active="/tasacion" isLoggedIn={!!session} />
+      <Header active="/tasacion" isLoggedIn={!!session} facebook={siteConfig.facebook} instagram={siteConfig.instagram} />
 
       {/* ── HERO ── */}
       <section className="relative h-[320px] overflow-hidden">

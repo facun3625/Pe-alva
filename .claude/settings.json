@@ -15,7 +15,8 @@
       "Bash(ls /Users/facundoarteagasola/Documents/penalva/app/admin/\\\\\\(protected\\\\\\)/)",
       "Bash(openssl rand:*)",
       "Bash(DATABASE_URL=\"file:./dev.db\" npx prisma db push)",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://app.penalvainmobiliaria.com.ar)"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://app.penalvainmobiliaria.com.ar)",
+      "Bash(grep -n \"<Header\" /Users/facundoarteagasola/Documents/penalva/app/page.tsx /Users/facundoarteagasola/Documents/penalva/app/comparar/page.tsx /Users/facundoarteagasola/Documents/penalva/app/nosotros/page.tsx /Users/facundoarteagasola/Documents/penalva/app/propiedades/page.tsx /Users/facundoarteagasola/Documents/penalva/app/mapa/page.tsx /Users/facundoarteagasola/Documents/penalva/app/tasacion/page.tsx /Users/facundoarteagasola/Documents/penalva/app/propiedad/[id]/page.tsx /Users/facundoarteagasola/Documents/penalva/app/favoritos/page.tsx)"
     ],
     "additionalDirectories": [
       "/Users/facundoarteagasola/.claude/projects/-Users-facundoarteagasola-Documents-penalva",

@@ -44,7 +44,7 @@ export default async function PropiedadesPage({ searchParams }: Props) {
   return (
     <div className="flex flex-col min-h-screen bg-white text-[#111]">
 
-      <Header active="/propiedades" isLoggedIn={!!session} />
+      <Header active="/propiedades" isLoggedIn={!!session} facebook={siteConfig.facebook} instagram={siteConfig.instagram} />
 
       {/* ── SEARCH BAR ── */}
       <div className="bg-[#f0efed] border-b border-gray-200 py-6">
