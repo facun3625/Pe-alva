@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
 import { X, Lock, Eye, EyeOff, Loader2 } from "lucide-react";
 
 interface Props {
@@ -10,7 +9,6 @@ interface Props {
 }
 
 export default function LoginModal({ open, onClose }: Props) {
-  const router = useRouter();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -46,7 +44,7 @@ export default function LoginModal({ open, onClose }: Props) {
       });
 
       if (res.ok) {
-        router.push("/admin");
+        window.location.href = "/admin";
       } else {
         setError("Usuario o contraseña incorrectos.");
       }
