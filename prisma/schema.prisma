@@ -67,6 +67,12 @@ model SiteConfig {
   updatedAt       DateTime @updatedAt
 }
 
+model AIInstruction {
+  id        String   @id @default(uuid())
+  text      String
+  createdAt DateTime @default(now())
+}
+
 model ContentBlock {
   key       String  @id
   value     String

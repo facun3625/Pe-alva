@@ -39,7 +39,7 @@ export default async function MapaPage({ searchParams }: Props) {
   return (
     <div className="flex flex-col min-h-screen bg-white text-[#111]">
 
-      <Header active="/mapa" isLoggedIn={!!session} facebook={siteConfig.facebook} instagram={siteConfig.instagram} />
+      <Header active="/mapa" isLoggedIn={!!session} facebook={siteConfig.facebook ?? undefined} instagram={siteConfig.instagram ?? undefined} />
 
       <MapaView
         properties={properties as any}

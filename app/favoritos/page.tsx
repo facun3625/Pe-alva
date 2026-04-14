@@ -13,7 +13,7 @@ export default async function FavoritosPage() {
   return (
     <div className="flex flex-col min-h-screen bg-white text-[#111]">
 
-      <Header active="/favoritos" isLoggedIn={!!session} facebook={siteConfig.facebook} instagram={siteConfig.instagram} />
+      <Header active="/favoritos" isLoggedIn={!!session} facebook={siteConfig.facebook ?? undefined} instagram={siteConfig.instagram ?? undefined} />
 
       {/* HERO */}
       <div className="bg-[#f8f6f2] border-b border-gray-200 py-10">

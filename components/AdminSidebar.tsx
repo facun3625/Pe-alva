@@ -19,6 +19,7 @@ import {
   User,
   ShieldCheck,
   History,
+  Bot,
 } from "lucide-react";
 
 const NAV = [
@@ -44,6 +45,7 @@ const NAV = [
     section: "Contenido",
     items: [
       { label: "Textos del sitio", href: "/admin/contenido", icon: FileText },
+      { label: "Asistente IA", href: "/admin/asistente", icon: Bot },
       { label: "Configuración", href: "/admin/configuracion", icon: Settings },
     ],
   },

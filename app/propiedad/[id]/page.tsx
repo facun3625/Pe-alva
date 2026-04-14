@@ -82,7 +82,7 @@ export default async function PropertyPage({ params }: Props) {
   return (
     <div className="flex flex-col min-h-screen bg-white text-[#111]">
 
-      <Header isLoggedIn={!!session} facebook={siteConfig.facebook} instagram={siteConfig.instagram} />
+      <Header isLoggedIn={!!session} facebook={siteConfig.facebook ?? undefined} instagram={siteConfig.instagram ?? undefined} />
 
       {/* ── BREADCRUMB ── */}
       <div className="bg-white border-b border-gray-100">

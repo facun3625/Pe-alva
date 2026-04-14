@@ -22,7 +22,8 @@ function buildSystemPrompt(
     whatsapp?: string | null;
     email?: string | null;
     address?: string | null;
-  } | null
+  } | null,
+  aiInstructions?: string | null
 ) {
   const propList = properties.length
     ? properties
@@ -78,7 +79,7 @@ DERIVAR A AGENTE HUMANO:
 - Cuando el usuario te dé su nombre y al menos teléfono o email, emitís este token EXACTO al inicio de tu respuesta (sin espacios antes):
 [GUARDAR_CONTACTO:{"nombre":"<nombre>","telefono":"<telefono o vacío>","email":"<email o vacío>","consulta":"<resumen de 1 oración de la consulta>"}]
 - Luego del token, seguís con un mensaje de confirmación amigable, ej: "¡Perfecto! Ya le pasé tus datos a nuestro equipo. Te van a contactar a la brevedad. ¿Puedo ayudarte con algo más?"
-- IMPORTANTE: Emití el token una sola vez, solo cuando tenés nombre + (teléfono o email). Nunca lo emitas sin esos datos.`;
+- IMPORTANTE: Emití el token una sola vez, solo cuando tenés nombre + (teléfono o email). Nunca lo emitas sin esos datos.${aiInstructions ? `\n\nINSTRUCCIONES ADICIONALES DE PENALVA:\n${aiInstructions}` : ""}`;
 }
 
 export async function POST(req: NextRequest) {
@@ -92,7 +93,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Mensajes inválidos" }, { status: 400 });
   }
 
-  const [properties, siteConfig] = await Promise.all([
+  const [properties, siteConfig, aiInstructions] = await Promise.all([
     prisma.property.findMany({
       where: { published: true },
       select: {
@@ -113,9 +114,14 @@ export async function POST(req: NextRequest) {
       orderBy: { createdAt: "desc" },
     }),
     prisma.siteConfig.findUnique({ where: { id: "singleton" } }),
+    prisma.aIInstruction.findMany({ orderBy: { createdAt: "asc" } }),
   ]);
 
-  const systemPrompt = buildSystemPrompt(properties, siteConfig);
+  const instructionsText = aiInstructions.length
+    ? aiInstructions.map((i, idx) => `${idx + 1}. ${i.text}`).join("\n")
+    : null;
+
+  const systemPrompt = buildSystemPrompt(properties, siteConfig, instructionsText);
 
   const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
     method: "POST",
