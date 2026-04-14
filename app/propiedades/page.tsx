@@ -61,7 +61,7 @@ export default async function PropiedadesPage({ searchParams }: Props) {
       {/* ── RESULTS ── */}
       <section className="flex-1 py-12 bg-[#f8f6f2]">
         <div className="max-w-7xl mx-auto px-8 md:px-12 lg:px-16">
-          <PropiedadesView properties={properties as any} hasFilters={hasFilters} />
+          <PropiedadesView properties={properties as any} hasFilters={hasFilters} filters={{ ciudad, tipo, operacion, dormitorios }} />
         </div>
       </section>
 

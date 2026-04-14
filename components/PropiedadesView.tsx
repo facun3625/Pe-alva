@@ -5,6 +5,7 @@ import { MapPin, LayoutGrid, Map, Bed, Bath, Car, SlidersHorizontal, GitCompare,
 import MapLoader from "@/components/MapLoader";
 import CompareBar from "@/components/CompareBar";
 import FavoriteCardButton from "@/components/FavoriteCardButton";
+import AlertSubscribeForm from "@/components/AlertSubscribeForm";
 import { formatPrice } from "@/lib/formatPrice";
 
 interface Property {
@@ -29,9 +30,10 @@ interface Property {
 interface Props {
   properties: Property[];
   hasFilters: boolean;
+  filters?: { ciudad?: string; tipo?: string; operacion?: string; dormitorios?: string };
 }
 
-export default function PropiedadesView({ properties, hasFilters }: Props) {
+export default function PropiedadesView({ properties, hasFilters, filters }: Props) {
   const [view, setView] = useState<"grid" | "map">("grid");
 
   return (
@@ -164,6 +166,14 @@ export default function PropiedadesView({ properties, hasFilters }: Props) {
             </div>
           )}
         </>
+      )}
+      {hasFilters && (
+        <AlertSubscribeForm
+          ciudad={filters?.ciudad}
+          tipo={filters?.tipo}
+          operacion={filters?.operacion}
+          dormitorios={filters?.dormitorios}
+        />
       )}
       <CompareBar />
     </>

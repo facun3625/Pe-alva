@@ -21,6 +21,7 @@ const PAGE_LABELS: Record<string, string> = {
   nosotros: "Nosotros",
   tasacion: "Tasación",
   footer: "Footer",
+  email: "Email de alertas",
 };
 
 export default function ContenidoClient({ blocks, saveBlock }: Props) {

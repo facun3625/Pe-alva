@@ -27,6 +27,11 @@ export const CONTENT_DEFAULTS: Record<string, { label: string; page: string; mul
   footer_cta_titulo:    { page: "footer", label: "Banda CTA — Título", multiline: false, value: "Hablemos hoy." },
   footer_cta_subtitulo: { page: "footer", label: "Banda CTA — Subtítulo", multiline: false, value: "¿Querés vender o alquilar?" },
 
+  // EMAIL ALERTAS
+  email_asunto:   { page: "email", label: "Asunto del email", multiline: false, value: "Nuevas propiedades que coinciden con tu búsqueda — Penalva Inmobiliaria" },
+  email_saludo:   { page: "email", label: "Texto introductorio", multiline: false, value: "Ingresaron nuevas propiedades que coinciden con tu búsqueda:" },
+  email_cierre:   { page: "email", label: "Texto de cierre", multiline: true, value: "Si tenés alguna consulta no dudes en contactarnos. Estamos para ayudarte." },
+
   // TASACIÓN
   tasacion_hero_titulo:      { page: "tasacion", label: "Hero — Título", multiline: false, value: "Tasación de Propiedades" },
   tasacion_hero_subtitulo:   { page: "tasacion", label: "Hero — Subtítulo", multiline: false, value: "Conocé el valor real de tu propiedad con un informe profesional respaldado por el mercado." },

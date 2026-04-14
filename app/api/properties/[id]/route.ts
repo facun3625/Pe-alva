@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { createAuditLog } from "@/lib/audit";
+import { checkAlertsForProperty } from "@/lib/alerts";
 
 export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -28,8 +29,15 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       else data[f] = v ?? null;
     }
 
+    const prev = await prisma.property.findUnique({ where: { id }, select: { published: true } });
     const property = await prisma.property.update({ where: { id }, data });
     await createAuditLog("UPDATE", "Property", property.id, { title: property.title });
+
+    // Si se acaba de publicar, verificar alertas
+    if (data.published === true && prev?.published === false) {
+      await checkAlertsForProperty(property);
+    }
+
     return NextResponse.json(property);
   } catch (e: any) {
     console.error("PATCH property error:", e);

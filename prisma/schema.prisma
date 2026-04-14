@@ -67,6 +67,28 @@ model SiteConfig {
   updatedAt       DateTime @updatedAt
 }
 
+model PropertyAlert {
+  id                  String   @id @default(uuid())
+  nombre              String
+  email               String
+  ciudad              String?
+  tipo                String?
+  operacion           String?
+  dormitorios         Int?
+  pending             Boolean  @default(false)
+  lastMatchPropertyId String?
+  createdAt           DateTime @default(now())
+}
+
+model EmailLog {
+  id        String   @id @default(uuid())
+  to        String
+  nombre    String
+  subject   String
+  alertId   String
+  createdAt DateTime @default(now())
+}
+
 model AIInstruction {
   id        String   @id @default(uuid())
   text      String

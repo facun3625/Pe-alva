@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { createAuditLog } from "@/lib/audit";
+import { checkAlertsForProperty } from "@/lib/alerts";
 
 export async function GET(req: Request) {
     try {
@@ -89,6 +90,7 @@ export async function POST(request: Request) {
         });
 
         await createAuditLog("CREATE", "Property", property.id, { title: property.title });
+        await checkAlertsForProperty(property);
 
         return NextResponse.json(property);
     } catch (error) {

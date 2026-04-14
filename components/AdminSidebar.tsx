@@ -20,6 +20,7 @@ import {
   ShieldCheck,
   History,
   Bot,
+  BellRing,
 } from "lucide-react";
 
 const NAV = [
@@ -39,6 +40,7 @@ const NAV = [
     items: [
       { label: "Tasaciones", href: "/admin/tasaciones", icon: Calculator },
       { label: "Contactos", href: "/admin/contactos", icon: Users },
+      { label: "Alertas", href: "/admin/alertas", icon: BellRing },
     ],
   },
   {
@@ -65,15 +67,18 @@ export default function AdminSidebar() {
   const [pendingTasaciones, setPendingTasaciones] = useState(0);
 
   const [pendingContacts, setPendingContacts] = useState(0);
+  const [pendingAlerts, setPendingAlerts] = useState(0);
 
   const fetchCounts = () => {
     Promise.all([
       fetch("/api/tasaciones").then((r) => r.json()),
       fetch("/api/contacts").then((r) => r.json()),
+      fetch("/api/alerts").then((r) => r.json()),
     ])
-      .then(([tas, con]) => {
+      .then(([tas, con, alerts]) => {
         setPendingTasaciones((tas as { status: string }[]).filter((r) => r.status === "pending").length);
         setPendingContacts((con as { status: string }[]).filter((r) => r.status === "pending").length);
+        setPendingAlerts((alerts as { pending: boolean }[]).filter((a) => a.pending).length);
       })
       .catch(() => {});
   };
@@ -128,6 +133,7 @@ export default function AdminSidebar() {
                         const badge =
                           item.href === "/admin/tasaciones" && pendingTasaciones > 0 ? pendingTasaciones
                           : item.href === "/admin/contactos" && pendingContacts > 0 ? pendingContacts
+                          : item.href === "/admin/alertas" && pendingAlerts > 0 ? pendingAlerts
                           : 0;
                         return badge > 0 ? (
                           <span className="ml-auto bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full leading-none">
