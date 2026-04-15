@@ -76,22 +76,22 @@ export default async function ConsorciosPage() {
       <Header active="/administracion-consorcios" isLoggedIn={!!session} facebook={siteConfig.facebook ?? undefined} instagram={siteConfig.instagram ?? undefined} />
 
       {/* ── HERO ── */}
-      <section className="relative h-[400px] overflow-hidden">
+      <section className="relative h-[320px] overflow-hidden">
         <img
           src={heroImg}
           alt="Administración de Consorcios"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#262522]/90 via-[#262522]/65 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#262522]/85 via-[#262522]/60 to-transparent" />
         <div className="absolute inset-0 flex items-center px-8 md:px-16 lg:px-24">
-          <div className="max-w-2xl">
+          <div>
             <p className="text-brand-orange text-[10px] uppercase tracking-[0.4em] font-semibold mb-3">
               Servicios
             </p>
-            <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight mb-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight">
               {heroTitulo}
             </h1>
-            <p className="text-white/70 text-[16px] leading-relaxed">
+            <p className="mt-3 text-white/50 text-[14px] max-w-md leading-relaxed">
               {heroSubtitulo}
             </p>
           </div>

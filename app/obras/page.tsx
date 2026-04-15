@@ -67,22 +67,22 @@ export default async function ObrasPage() {
       <Header active="/obras" isLoggedIn={!!session} facebook={siteConfig.facebook ?? undefined} instagram={siteConfig.instagram ?? undefined} />
 
       {/* ── HERO ── */}
-      <section className="relative h-[500px] overflow-hidden">
+      <section className="relative h-[320px] overflow-hidden">
         <img
           src={heroImg}
           alt="Proyecto y Obra"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-[#262522]/60" />
-        <div className="absolute inset-0 flex items-center justify-center text-center px-8">
-          <div className="max-w-3xl">
-            <p className="text-brand-orange text-[12px] uppercase tracking-[0.5em] font-bold mb-4">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#262522]/85 via-[#262522]/60 to-transparent" />
+        <div className="absolute inset-0 flex items-center px-8 md:px-16 lg:px-24">
+          <div>
+            <p className="text-brand-orange text-[10px] uppercase tracking-[0.4em] font-semibold mb-3">
               Arquitectura & Construcción
             </p>
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 uppercase">
+            <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight">
               {heroTitulo}
             </h1>
-            <p className="text-white/80 text-lg md:text-xl font-light">
+            <p className="mt-3 text-white/50 text-[14px] max-w-md leading-relaxed">
               {heroSubtitulo}
             </p>
           </div>
