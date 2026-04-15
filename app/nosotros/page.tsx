@@ -81,11 +81,13 @@ const TEAM = [
 ];
 
 export default async function NosotrosPage() {
-  const [session, siteConfig, heroTitulo, heroSubtitulo, empresaTitulo, empresaP1, empresaP2, empresaP3, empresaQuote, horario, valoresTitulo, equipoTitulo, contactoTexto] = await Promise.all([
+  const [session, siteConfig, heroTitulo, heroSubtitulo, heroImg, empresaImg, empresaTitulo, empresaP1, empresaP2, empresaP3, empresaQuote, horario, valoresTitulo, equipoTitulo, contactoTexto] = await Promise.all([
     getSession(),
     getSiteConfig(),
     getContent("nosotros_hero_titulo"),
     getContent("nosotros_hero_subtitulo"),
+    getContent("nosotros_hero_img"),
+    getContent("nosotros_empresa_img"),
     getContent("nosotros_empresa_titulo"),
     getContent("nosotros_empresa_p1"),
     getContent("nosotros_empresa_p2"),
@@ -104,7 +106,7 @@ export default async function NosotrosPage() {
       {/* ── HERO ── */}
       <section className="relative h-[320px] overflow-hidden">
         <img
-          src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1600&q=80"
+          src={heroImg}
           alt="Oficina Penalva"
           className="w-full h-full object-cover"
         />
@@ -174,7 +176,7 @@ export default async function NosotrosPage() {
 
             <div className="relative">
               <img
-                src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=800&q=80"
+                src={empresaImg}
                 alt="Oficina Penalva"
                 className="w-full h-[420px] object-cover rounded-2xl shadow-xl"
               />

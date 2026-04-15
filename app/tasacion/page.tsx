@@ -84,11 +84,12 @@ const TYPES = [
 ];
 
 export default async function TasacionPage() {
-  const [session, siteConfig, heroTitulo, heroSubtitulo, introTitulo, introP1, introP2, introCta, tiposTitulo, procesoTitulo, formTitulo, formSubtitulo] = await Promise.all([
+  const [session, siteConfig, heroTitulo, heroSubtitulo, heroImg, introTitulo, introP1, introP2, introCta, tiposTitulo, procesoTitulo, formTitulo, formSubtitulo] = await Promise.all([
     getSession(),
     getSiteConfig(),
     getContent("tasacion_hero_titulo"),
     getContent("tasacion_hero_subtitulo"),
+    getContent("tasacion_hero_img"),
     getContent("tasacion_intro_titulo"),
     getContent("tasacion_intro_p1"),
     getContent("tasacion_intro_p2"),
@@ -106,7 +107,7 @@ export default async function TasacionPage() {
       {/* ── HERO ── */}
       <section className="relative h-[320px] overflow-hidden">
         <img
-          src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1600&q=80"
+          src={heroImg}
           alt="Tasación de propiedades"
           className="w-full h-full object-cover"
         />

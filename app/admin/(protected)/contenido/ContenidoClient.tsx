@@ -20,6 +20,8 @@ const PAGE_LABELS: Record<string, string> = {
   home: "Inicio",
   nosotros: "Nosotros",
   tasacion: "Tasación",
+  consorcios: "Consorcios",
+  obras: "Obras",
   footer: "Footer",
   email: "Email de alertas",
 };
@@ -47,14 +49,14 @@ export default function ContenidoClient({ blocks, saveBlock }: Props) {
   const activeBlocks = blocks.filter((b) => b.page === activeTab);
 
   return (
-    <div className="p-8 max-w-3xl">
+    <div className="p-8 w-full">
       {/* Header */}
       <div className="flex items-center gap-3 mb-8">
         <FileText size={20} className="text-brand-orange" />
         <div>
           <h1 className="text-xl font-bold text-[#111]">Contenido del sitio</h1>
           <p className="text-[13px] text-gray-400 mt-0.5">
-            Editá los textos de cada página. Los cambios se reflejan de inmediato.
+            Editá los textos e imágenes de cada página. Los cambios se reflejan de inmediato.
           </p>
         </div>
       </div>
@@ -98,6 +100,64 @@ export default function ContenidoClient({ blocks, saveBlock }: Props) {
                   onChange={(e) => setValues((v) => ({ ...v, [block.key]: e.target.value }))}
                   className="w-full px-3 py-2 text-[13px] text-[#111] border border-gray-200 rounded-lg focus:outline-none focus:border-brand-orange transition-colors"
                 />
+              )}
+              {block.key.includes("_img") && (
+                <div className="mt-3 flex items-start gap-4">
+                  <div className="relative w-40 h-24 rounded-lg overflow-hidden border border-gray-100 bg-gray-50 group/img">
+                    {values[block.key] ? (
+                      <img 
+                        src={values[block.key]} 
+                        alt="Preview" 
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).style.display = 'none';
+                        }}
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <Loader2 className="animate-spin text-gray-200" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="cursor-pointer flex items-center gap-2 bg-white border border-gray-200 hover:border-brand-orange text-gray-600 hover:text-brand-orange px-3 py-1.5 rounded-lg text-[12px] font-medium transition-all shadow-sm">
+                      <Loader2 size={13} className={pending[`u_${block.key}`] ? "animate-spin" : "hidden"} />
+                      <span>{pending[`u_${block.key}`] ? "Subiendo..." : "Subir desde PC"}</span>
+                      <input 
+                        type="file" 
+                        className="hidden" 
+                        accept="image/*"
+                        disabled={pending[`u_${block.key}`]}
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (!file) return;
+
+                          setPending(p => ({ ...p, [`u_${block.key}`]: true }));
+                          const formData = new FormData();
+                          formData.append("file", file);
+
+                          try {
+                            const res = await fetch("/api/upload", {
+                              method: "POST",
+                              body: formData,
+                            });
+                            if (res.ok) {
+                              const { url } = await res.json();
+                              setValues(v => ({ ...v, [block.key]: url }));
+                            }
+                          } catch (err) {
+                            console.error("Upload failed", err);
+                          } finally {
+                            setPending(p => ({ ...p, [`u_${block.key}`]: false }));
+                          }
+                        }}
+                      />
+                    </label>
+                    <p className="text-[10px] text-gray-400 max-w-[150px]">
+                      Recomendado: JPG o PNG. Tamaño máx 2MB.
+                    </p>
+                  </div>
+                </div>
               )}
             </div>
             <button

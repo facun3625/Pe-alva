@@ -20,7 +20,7 @@ interface Props {
 
 export default function PropertyDetailMapInner({ lat, lng, title }: Props) {
   return (
-    <div className="h-[300px] w-full">
+    <div className="h-[300px] w-full relative isolate">
       <MapContainer
         center={[lat, lng]}
         zoom={16}

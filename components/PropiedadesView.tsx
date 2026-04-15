@@ -83,7 +83,7 @@ export default function PropiedadesView({ properties, hasFilters, filters }: Pro
 
       {/* Vista mapa */}
       {view === "map" && (
-        <div className="rounded-xl overflow-hidden shadow-sm border border-gray-200">
+        <div className="relative isolate rounded-xl overflow-hidden shadow-sm border border-gray-200">
           {properties.filter((p) => p.lat && p.lng).length === 0 ? (
             <div className="h-[500px] bg-white flex flex-col items-center justify-center gap-3 text-gray-400">
               <MapPin size={32} className="opacity-30" />

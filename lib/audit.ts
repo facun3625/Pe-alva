@@ -3,7 +3,7 @@ import { getSession } from "@/lib/auth";
 
 export async function createAuditLog(
   action: "CREATE" | "UPDATE" | "DELETE" | "LOGIN" | "PASSWORD_CHANGE",
-  entityType: "Property" | "User" | "SiteConfig" | "ContentBlock",
+  entityType: "Property" | "User" | "SiteConfig" | "ContentBlock" | "Consorcio",
   entityId?: string,
   details?: Record<string, unknown>
 ) {

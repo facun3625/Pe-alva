@@ -1,15 +1,23 @@
 "use client";
 
 import { useState } from "react";
-import { Phone, Mail, Facebook, Instagram, Menu, X, LayoutDashboard, Lock } from "lucide-react";
+import { Phone, Mail, Facebook, Instagram, Menu, X, LayoutDashboard, Lock, ChevronDown } from "lucide-react";
 import AccesoButton from "@/components/AccesoButton";
 import FavoritosNavButton from "@/components/FavoritosNavButton";
 
 const NAV_LINKS = [
   { href: "/", label: "Inicio" },
   { href: "/nosotros", label: "Nosotros" },
-  { href: "/tasacion", label: "Tasación" },
+  { 
+    label: "Servicios", 
+    submenu: [
+      { href: "/tasacion", label: "Tasación" },
+      { href: "/administracion-consorcios", label: "Administración de Consorcios" },
+      { href: "/obras", label: "Proyecto y Ejecución de Obras" },
+    ]
+  },
   { href: "/mapa", label: "Propiedades en Mapa" },
+  { href: "/alertas", label: "Recibir Alertas" },
   { href: "#contacto", label: "Contacto" },
 ];
 
@@ -24,7 +32,7 @@ export default function Header({ active, isLoggedIn, facebook, instagram }: Prop
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50">
+    <header className="sticky top-0 z-[9999]">
 
       {/* Top bar — hidden on mobile */}
       <div className="hidden md:flex bg-[#3a3a3a] px-4 h-9 items-center justify-end">
@@ -58,14 +66,44 @@ export default function Header({ active, isLoggedIn, facebook, instagram }: Prop
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center text-[13px] font-medium text-white/70">
             {NAV_LINKS.map((link, i) => (
-              <span key={link.href} className="flex items-center">
+              <span key={link.label} className="flex items-center h-full group relative">
                 {i > 0 && <span className="w-px h-3.5 bg-white/25" />}
-                <a
-                  href={link.href}
-                  className={`px-5 py-3 transition-colors hover:text-white ${active === link.href ? "text-white font-semibold" : ""}`}
-                >
-                  {link.label}
-                </a>
+                {link.submenu ? (
+                  <div className="relative h-full flex items-center">
+                    <button
+                      className={`px-5 py-3 transition-colors hover:text-white flex items-center gap-1.5 ${
+                        link.submenu.some(s => s.href === active) ? "text-white font-semibold" : ""
+                      }`}
+                    >
+                      {link.label}
+                      <ChevronDown size={14} className="group-hover:rotate-180 transition-transform duration-300" />
+                    </button>
+                    
+                    {/* Dropdown Menu */}
+                    <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-[100]">
+                      <div className="bg-[#262522] border border-white/10 rounded-lg shadow-2xl py-2 min-w-[240px] overflow-hidden">
+                        {link.submenu.map((sub) => (
+                          <a
+                            key={sub.href}
+                            href={sub.href}
+                            className={`block px-5 py-3 text-[13px] transition-colors hover:bg-white/5 hover:text-white ${
+                              active === sub.href ? "text-brand-orange font-semibold bg-white/5" : "text-white/70"
+                            }`}
+                          >
+                            {sub.label}
+                          </a>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <a
+                    href={link.href}
+                    className={`px-5 py-3 transition-colors hover:text-white ${active === link.href ? "text-white font-semibold" : ""}`}
+                  >
+                    {link.label}
+                  </a>
+                )}
               </span>
             ))}
           </nav>
@@ -90,19 +128,40 @@ export default function Header({ active, isLoggedIn, facebook, instagram }: Prop
 
       {/* Mobile dropdown menu */}
       {open && (
-        <div className="md:hidden bg-[#262522] border-t border-white/10 absolute w-full left-0 z-50 shadow-xl">
+        <div className="md:hidden bg-[#262522] border-t border-white/10 absolute w-full left-0 z-[9999] shadow-xl">
           <nav className="flex flex-col py-2">
             {NAV_LINKS.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={() => setOpen(false)}
-                className={`px-6 py-4 text-[14px] font-medium border-b border-white/5 transition-colors hover:bg-white/5 ${
-                  active === link.href ? "text-brand-orange" : "text-white/80"
-                }`}
-              >
-                {link.label}
-              </a>
+              <div key={link.label} className="border-b border-white/5">
+                {link.submenu ? (
+                  <div className="flex flex-col">
+                    <div className="px-6 py-4 text-[14px] font-bold text-white/40 uppercase tracking-widest bg-white/[0.02]">
+                      {link.label}
+                    </div>
+                    {link.submenu.map((sub) => (
+                      <a
+                        key={sub.href}
+                        href={sub.href}
+                        onClick={() => setOpen(false)}
+                        className={`px-10 py-4 text-[14px] font-medium border-b border-white/5 transition-colors hover:bg-white/5 ${
+                          active === sub.href ? "text-brand-orange" : "text-white/80"
+                        }`}
+                      >
+                        {sub.label}
+                      </a>
+                    ))}
+                  </div>
+                ) : (
+                  <a
+                    href={link.href}
+                    onClick={() => setOpen(false)}
+                    className={`px-6 py-4 text-[14px] font-medium block transition-colors hover:bg-white/5 ${
+                      active === link.href ? "text-brand-orange" : "text-white/80"
+                    }`}
+                  >
+                    {link.label}
+                  </a>
+                )}
+              </div>
             ))}
             <FavoritosNavButton mobile onClick={() => setOpen(false)} />
             {isLoggedIn ? (

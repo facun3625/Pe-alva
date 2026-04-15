@@ -152,9 +152,23 @@ model AuditLog {
   userId     String?
   userName   String?
   action     String   // "CREATE", "UPDATE", "DELETE", "LOGIN", "PASSWORD_CHANGE"
-  entityType String   // "Property", "User", "SiteConfig", "ContentBlock"
+  entityType String   // "Property", "User", "SiteConfig", "ContentBlock", "Consorcio"
   entityId   String?
   details    String?  // JSON stringified details
   createdAt  DateTime @default(now())
   user       User?    @relation(fields: [userId], references: [id])
+}
+
+model Consorcio {
+  id        String   @id @default(uuid())
+  nombre    String
+  banco     String?
+  titular   String?  // Nombre de la cuenta
+  cuit      String?
+  cbu       String?
+  ca        String?  // Caja de ahorros / Cuenta corriente
+  order     Int      @default(0)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

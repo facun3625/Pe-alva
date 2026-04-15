@@ -29,6 +29,7 @@ const NAV = [
     items: [
       { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
       { label: "Propiedades", href: "/admin/propiedades", icon: Building2 },
+      { label: "Consorcios", href: "/admin/consorcios", icon: Users },
       { label: "Nueva propiedad", href: "/admin/nueva", icon: Plus },
       { label: "Destacadas", href: "/admin/destacadas", icon: Star },
       { label: "Opciones", href: "/admin/opciones", icon: SlidersHorizontal },
@@ -46,7 +47,7 @@ const NAV = [
   {
     section: "Contenido",
     items: [
-      { label: "Textos del sitio", href: "/admin/contenido", icon: FileText },
+      { label: "Contenido del sitio", href: "/admin/contenido", icon: FileText },
       { label: "Asistente IA", href: "/admin/asistente", icon: Bot },
       { label: "Configuración", href: "/admin/configuracion", icon: Settings },
     ],

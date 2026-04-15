@@ -6,6 +6,7 @@ import {
   Bed,
   Bath,
   Car,
+  Bell,
 } from "lucide-react";
 import prisma from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
@@ -51,7 +52,7 @@ async function getProperties(): Promise<Property[]> {
 }
 
 export default async function Home() {
-  const [properties, operations, cities, propertyTypes, session, siteConfig, heroTitulo, heroSubtitulo] = await Promise.all([
+  const [properties, operations, cities, propertyTypes, session, siteConfig, heroTitulo, heroSubtitulo, heroImg] = await Promise.all([
     getProperties(),
     prisma.operationType.findMany({ orderBy: { order: "asc" } }),
     prisma.city.findMany({ orderBy: { order: "asc" } }),
@@ -60,6 +61,7 @@ export default async function Home() {
     getSiteConfig(),
     getContent("home_titulo"),
     getContent("home_subtitulo"),
+    getContent("home_hero_img"),
   ]);
 
   return (
@@ -98,7 +100,7 @@ export default async function Home() {
         {/* Derecha — imagen 35% */}
         <div className="hidden md:block w-[35%] overflow-hidden">
           <img
-            src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=1200&q=80"
+            src={heroImg}
             alt="Propiedad"
             className="w-full h-full object-cover"
           />
@@ -202,6 +204,28 @@ export default async function Home() {
               <p className="text-gray-300 text-sm">No hay propiedades disponibles en este momento.</p>
             </div>
           )}
+        </div>
+      </section>
+
+      {/* ── ALERTS CTA ── */}
+      <section className="py-20 bg-[#262522] text-white">
+        <div className="max-w-7xl mx-auto px-8 md:px-12 lg:px-16">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-10">
+            <div className="max-w-2xl">
+              <p className="text-brand-orange text-[10px] uppercase tracking-[0.4em] font-semibold mb-4">No pierdas tiempo</p>
+              <h2 className="text-3xl md:text-4xl font-bold mb-5">¿No encontraste lo que buscabas?</h2>
+              <p className="text-white/40 text-[15px] leading-relaxed">
+                El mercado inmobiliario se mueve rápido. Suscribite a nuestro sistema de alertas personalizadas y recibí un aviso en tu email apenas ingrese una propiedad que coincida con tus necesidades.
+              </p>
+            </div>
+            <a 
+              href="/alertas" 
+              className="px-10 py-5 bg-brand-orange text-white font-bold text-[14px] uppercase tracking-wider rounded-2xl shadow-xl shadow-brand-orange/20 hover:bg-orange-700 hover:shadow-orange-700/30 transition-all shrink-0 flex items-center gap-3"
+            >
+              <Bell size={18} />
+              Configurar mi alerta
+            </a>
+          </div>
         </div>
       </section>
 

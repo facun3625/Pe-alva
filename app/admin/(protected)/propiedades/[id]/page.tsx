@@ -66,6 +66,7 @@ export default function EditarPropiedadPage() {
   const [featuredIndex, setFeaturedIndex] = useState(0);
   const [suggestions, setSuggestions] = useState<any[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [showManualCoords, setShowManualCoords] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
   const debounceTimer = useRef<NodeJS.Timeout>(null);
 
@@ -215,29 +216,63 @@ export default function EditarPropiedadPage() {
             </div>
 
             <div className={card}>
-              <h2 className={sectionTitle}>Ubicación</h2>
-              <div className="space-y-1.5 relative">
-                <div className="flex justify-between items-center">
-                  <label className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Dirección</label>
-                  {isSearching && <Loader2 size={11} className="animate-spin text-brand-orange" />}
-                </div>
-                <div className="relative">
-                  <input required name="address" value={formData.address} onChange={handleAddressChange} className={f} autoComplete="off" />
-                  <MapPin size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300" />
-                </div>
-                {showSuggestions && suggestions.length > 0 && (
-                  <div className="absolute z-50 w-full bg-white border border-gray-200 shadow-xl rounded-lg mt-1 max-h-48 overflow-y-auto">
-                    {suggestions.map((sug, idx) => (
-                      <div key={idx} onMouseDown={(e) => { e.preventDefault(); selectSuggestion(sug); }} className="px-3 py-2.5 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-0 text-[12px]">
-                        <p className="font-medium text-[#111]">{sug.address.road || sug.display_name.split(",")[0]} {sug.address.house_number || ""}</p>
-                        <p className="text-[11px] text-gray-400 truncate">{sug.display_name}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
+              <div className="flex items-center justify-between mb-4">
+                <h2 className={sectionTitle}>Ubicación</h2>
+                <button 
+                  type="button" 
+                  onClick={() => setShowManualCoords(!showManualCoords)}
+                  className="text-[10px] text-brand-orange hover:underline uppercase tracking-widest font-bold"
+                >
+                  {showManualCoords ? "Usar buscador" : "Ingresar coordenadas manual"}
+                </button>
               </div>
-              {formData.lat && formData.lng && (
-                <p className="text-[11px] text-green-500 flex items-center gap-1"><MapPin size={10} /> {Number(formData.lat).toFixed(5)}, {Number(formData.lng).toFixed(5)}</p>
+
+              {!showManualCoords ? (
+                <div className="space-y-1.5 relative">
+                  <div className="flex justify-between items-center">
+                    <label className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Dirección</label>
+                    {isSearching && <Loader2 size={11} className="animate-spin text-brand-orange" />}
+                  </div>
+                  <div className="relative">
+                    <input required name="address" value={formData.address} onChange={handleAddressChange} className={f} autoComplete="off" />
+                    <MapPin size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-300" />
+                  </div>
+                  {showSuggestions && suggestions.length > 0 && (
+                    <div className="absolute z-50 w-full bg-white border border-gray-200 shadow-xl rounded-lg mt-1 max-h-48 overflow-y-auto">
+                      {suggestions.map((sug, idx) => (
+                        <div key={idx} onMouseDown={(e) => { e.preventDefault(); selectSuggestion(sug); }} className="px-3 py-2.5 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-0 text-[12px]">
+                          <p className="font-medium text-[#111]">{sug.address.road || sug.display_name.split(",")[0]} {sug.address.house_number || ""}</p>
+                          <p className="text-[11px] text-gray-400 truncate">{sug.display_name}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {formData.lat && formData.lng && (
+                    <p className="text-[11px] text-green-500 flex items-center gap-1 mt-2">
+                      <MapPin size={10} /> Ubicación confirmada: {Number(formData.lat).toFixed(5)}, {Number(formData.lng).toFixed(5)}
+                    </p>
+                  )}
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="space-y-1.5">
+                    <label className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Dirección / Referencia</label>
+                    <input required name="address" value={formData.address} onChange={handleChange} placeholder="Ej: Ruta 1 Km 15" className={f} />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Latitud</label>
+                      <input required type="number" step="any" name="lat" value={formData.lat} onChange={handleChange} placeholder="-31.6333" className={f} />
+                    </div>
+                    <div className="space-y-1.5">
+                      <label className="text-[11px] font-semibold text-gray-400 uppercase tracking-wider">Longitud</label>
+                      <input required type="number" step="any" name="lng" value={formData.lng} onChange={handleChange} placeholder="-60.7000" className={f} />
+                    </div>
+                  </div>
+                  <p className="text-[10px] text-gray-400 italic">
+                    Podés obtener estas coordenadas desde Google Maps (click derecho en el mapa).
+                  </p>
+                </div>
               )}
             </div>
 
