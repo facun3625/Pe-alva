@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Building2, Eye, Pencil, Trash2, MapPin, Loader2, Plus, Search, Star, X } from "lucide-react";
+import { Building2, Eye, EyeOff, Pencil, Trash2, MapPin, Loader2, Plus, Search, Star, X } from "lucide-react";
 import { formatPrice } from "@/lib/formatPrice";
 
 export default function PropiedadesPage() {
@@ -162,9 +162,9 @@ export default function PropiedadesPage() {
                   </td>
                   <td className="px-3 py-3.5 text-center">
                     <button onClick={() => togglePublished(p.id, p.published ?? true)}
-                      title={p.published ?? true ? "Click para despublicar" : "Click para publicar"}
-                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold uppercase tracking-wide transition-all cursor-pointer ${(p.published ?? true) ? "bg-green-50 text-green-600 hover:bg-green-100" : "bg-gray-100 text-gray-400 hover:bg-gray-200"}`}>
-                      <span className={`w-1.5 h-1.5 rounded-full ${(p.published ?? true) ? "bg-green-500" : "bg-gray-400"}`} />
+                      title={p.published ?? true ? "Click para ocultar" : "Click para publicar"}
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-semibold uppercase tracking-wide border transition-all cursor-pointer shadow-sm ${(p.published ?? true) ? "bg-green-50 text-green-700 border-green-200 hover:bg-green-100" : "bg-gray-50 text-gray-500 border-gray-200 hover:bg-gray-100"}`}>
+                      {(p.published ?? true) ? <Eye size={12} /> : <EyeOff size={12} />}
                       {(p.published ?? true) ? "Publicada" : "Oculta"}
                     </button>
                   </td>
