@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Plus, X, Star, Upload, Loader2, Link } from "lucide-react";
+import { Plus, X, Star, Upload, Loader2, Link, GripVertical } from "lucide-react";
 
 interface Props {
   images: string[];
@@ -14,6 +14,8 @@ export default function ImageManager({ images, featuredIndex, onChange, onFeatur
   const [urlInput, setUrlInput] = useState("");
   const [uploading, setUploading] = useState(false);
   const [tab, setTab] = useState<"upload" | "url">("upload");
+  const [dragIdx, setDragIdx] = useState<number | null>(null);
+  const [dragOverIdx, setDragOverIdx] = useState<number | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const addUrl = () => {
@@ -47,6 +49,47 @@ export default function ImageManager({ images, featuredIndex, onChange, onFeatur
     onChange(next);
     if (featuredIndex === idx) onFeaturedChange(0);
     else if (featuredIndex > idx) onFeaturedChange(featuredIndex - 1);
+  };
+
+  const handleDragStart = (e: React.DragEvent, idx: number) => {
+    setDragIdx(idx);
+    e.dataTransfer.effectAllowed = "move";
+  };
+
+  const handleDragOver = (e: React.DragEvent, idx: number) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    setDragOverIdx(idx);
+  };
+
+  const handleDropReorder = (e: React.DragEvent, toIdx: number) => {
+    e.preventDefault();
+    if (dragIdx === null || dragIdx === toIdx) {
+      setDragIdx(null);
+      setDragOverIdx(null);
+      return;
+    }
+    const next = [...images];
+    const [moved] = next.splice(dragIdx, 1);
+    next.splice(toIdx, 0, moved);
+    // Adjust featuredIndex to follow the starred image
+    let newFeatured = featuredIndex;
+    if (featuredIndex === dragIdx) {
+      newFeatured = toIdx;
+    } else if (dragIdx < featuredIndex && toIdx >= featuredIndex) {
+      newFeatured = featuredIndex - 1;
+    } else if (dragIdx > featuredIndex && toIdx <= featuredIndex) {
+      newFeatured = featuredIndex + 1;
+    }
+    onChange(next);
+    onFeaturedChange(newFeatured);
+    setDragIdx(null);
+    setDragOverIdx(null);
+  };
+
+  const handleDragEnd = () => {
+    setDragIdx(null);
+    setDragOverIdx(null);
   };
 
   return (
@@ -100,31 +143,52 @@ export default function ImageManager({ images, featuredIndex, onChange, onFeatur
 
       {/* Gallery grid */}
       {images.length > 0 && (
-        <div className="grid grid-cols-4 gap-2">
-          {images.map((url, idx) => (
-            <div key={idx} className="relative group rounded-lg overflow-hidden border-2 transition-all aspect-square"
-              style={{ borderColor: idx === featuredIndex ? "#df691a" : "transparent" }}>
-              <img src={url} alt="" className="w-full h-full object-cover"
-                onError={(e) => { (e.target as HTMLImageElement).src = "https://placehold.co/200x200/f4f4f5/999?text=Error"; }} />
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1.5">
-                <button type="button" onClick={() => onFeaturedChange(idx)} title="Imagen principal"
-                  className={`p-1.5 rounded-full transition-colors ${idx === featuredIndex ? "bg-brand-orange text-white" : "bg-white/90 text-gray-600 hover:bg-brand-orange hover:text-white"}`}>
-                  <Star size={11} fill={idx === featuredIndex ? "currentColor" : "none"} />
-                </button>
-                <button type="button" onClick={() => remove(idx)}
-                  className="p-1.5 rounded-full bg-white/90 text-gray-600 hover:bg-red-500 hover:text-white transition-colors">
-                  <X size={11} />
-                </button>
-              </div>
-              {idx === featuredIndex && (
-                <div className="absolute top-1 left-1 bg-brand-orange text-white text-[8px] font-bold px-1.5 py-0.5 rounded flex items-center gap-0.5">
-                  <Star size={7} fill="currentColor" /> Principal
+        <>
+          <p className="text-[11px] text-gray-400">Arrastrá las imágenes para reordenarlas</p>
+          <div className="grid grid-cols-4 gap-2">
+            {images.map((url, idx) => (
+              <div
+                key={url + idx}
+                draggable
+                onDragStart={(e) => handleDragStart(e, idx)}
+                onDragOver={(e) => handleDragOver(e, idx)}
+                onDrop={(e) => handleDropReorder(e, idx)}
+                onDragEnd={handleDragEnd}
+                className="relative group rounded-lg overflow-hidden border-2 transition-all aspect-square cursor-grab active:cursor-grabbing"
+                style={{
+                  borderColor: dragOverIdx === idx && dragIdx !== idx
+                    ? "#df691a"
+                    : idx === featuredIndex
+                    ? "#df691a"
+                    : "transparent",
+                  opacity: dragIdx === idx ? 0.4 : 1,
+                }}
+              >
+                <img src={url} alt="" className="w-full h-full object-cover"
+                  onError={(e) => { (e.target as HTMLImageElement).src = "https://placehold.co/200x200/f4f4f5/999?text=Error"; }} />
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1.5">
+                  <button type="button" onClick={() => onFeaturedChange(idx)} title="Imagen principal"
+                    className={`p-1.5 rounded-full transition-colors ${idx === featuredIndex ? "bg-brand-orange text-white" : "bg-white/90 text-gray-600 hover:bg-brand-orange hover:text-white"}`}>
+                    <Star size={11} fill={idx === featuredIndex ? "currentColor" : "none"} />
+                  </button>
+                  <button type="button" onClick={() => remove(idx)}
+                    className="p-1.5 rounded-full bg-white/90 text-gray-600 hover:bg-red-500 hover:text-white transition-colors">
+                    <X size={11} />
+                  </button>
                 </div>
-              )}
-              <div className="absolute bottom-1 right-1 bg-black/50 text-white text-[9px] px-1 rounded">{idx + 1}</div>
-            </div>
-          ))}
-        </div>
+                {idx === featuredIndex && (
+                  <div className="absolute top-1 left-1 bg-brand-orange text-white text-[8px] font-bold px-1.5 py-0.5 rounded flex items-center gap-0.5">
+                    <Star size={7} fill="currentColor" /> Principal
+                  </div>
+                )}
+                <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity text-white/70">
+                  <GripVertical size={12} />
+                </div>
+                <div className="absolute bottom-1 right-1 bg-black/50 text-white text-[9px] px-1 rounded">{idx + 1}</div>
+              </div>
+            ))}
+          </div>
+        </>
       )}
     </div>
   );

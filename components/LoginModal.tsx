@@ -11,6 +11,7 @@ interface Props {
 export default function LoginModal({ open, onClose }: Props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [remember, setRemember] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -18,8 +19,17 @@ export default function LoginModal({ open, onClose }: Props) {
   useEffect(() => {
     if (open) {
       setError("");
-      setUsername("");
-      setPassword("");
+      const saved = localStorage.getItem("login_remember");
+      if (saved) {
+        const { username: u, password: p } = JSON.parse(saved);
+        setUsername(u);
+        setPassword(p);
+        setRemember(true);
+      } else {
+        setUsername("");
+        setPassword("");
+        setRemember(false);
+      }
     }
   }, [open]);
 
@@ -44,6 +54,11 @@ export default function LoginModal({ open, onClose }: Props) {
       });
 
       if (res.ok) {
+        if (remember) {
+          localStorage.setItem("login_remember", JSON.stringify({ username, password }));
+        } else {
+          localStorage.removeItem("login_remember");
+        }
         window.location.href = "/admin";
       } else {
         setError("Usuario o contraseña incorrectos.");
@@ -126,6 +141,16 @@ export default function LoginModal({ open, onClose }: Props) {
               </button>
             </div>
           </div>
+
+          <label className="flex items-center gap-2.5 cursor-pointer select-none">
+            <input
+              type="checkbox"
+              checked={remember}
+              onChange={(e) => setRemember(e.target.checked)}
+              className="w-4 h-4 accent-brand-orange"
+            />
+            <span className="text-[12px] text-gray-500">Recordar usuario y contraseña</span>
+          </label>
 
           {error && (
             <p className="text-red-500 text-[12px] bg-red-50 px-4 py-2.5 rounded-lg">

@@ -51,13 +51,9 @@ const STEPS = [
 ];
 
 const INCLUDES = [
-  "Inspección presencial del inmueble",
-  "Análisis comparativo de mercado (ACM)",
-  "Evaluación del estado edilicio",
-  "Consideración de ubicación y entorno",
-  "Informe escrito con respaldo técnico",
-  "Asesoramiento sobre precio de publicación",
-  "Sin costo ni compromiso de venta",
+  "Informes técnicos detallados",
+  "Análisis comparativo de mercado (ACM) actualizado",
+  "Asesoramiento basado en los índices de realidad local",
 ];
 
 const TYPES = [
