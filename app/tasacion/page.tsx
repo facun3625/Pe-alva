@@ -111,7 +111,7 @@ export default async function TasacionPage() {
               <div className="space-y-4 text-[15px] text-gray-600 leading-relaxed">
                 <p>{c.tasacion_intro_p1}</p>
                 {c.tasacion_intro_p2 && <p>{c.tasacion_intro_p2}</p>}
-                <p className="text-brand-orange font-semibold">{c.tasacion_intro_cta}</p>
+                <a href="#solicitar" className="inline-block text-brand-orange font-semibold hover:opacity-75 transition-opacity">{c.tasacion_intro_cta}</a>
               </div>
 
               <div className="mt-8 flex items-center gap-3 text-[13px] text-gray-500">
