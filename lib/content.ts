@@ -39,14 +39,41 @@ export const CONTENT_DEFAULTS: Record<string, { label: string; page: string; mul
   tasacion_hero_titulo:      { page: "tasacion", label: "Hero — Título", multiline: false, value: "Tasación de Propiedades" },
   tasacion_hero_subtitulo:   { page: "tasacion", label: "Hero — Subtítulo", multiline: false, value: "Conocé el valor real de tu propiedad con un informe profesional respaldado por el mercado." },
   tasacion_hero_img:         { page: "tasacion", label: "Hero — Imagen", multiline: false, value: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1600&q=80" },
+  tasacion_hero_eyebrow:     { page: "tasacion", label: "Hero — Etiqueta superior", multiline: false, value: "Servicios" },
   tasacion_intro_titulo:     { page: "tasacion", label: "Intro — Título", multiline: false, value: "El valor real de su propiedad en Santa Fe." },
+  tasacion_intro_eyebrow:    { page: "tasacion", label: "Intro — Etiqueta superior", multiline: false, value: "Tasación profesional" },
   tasacion_intro_p1:         { page: "tasacion", label: "Intro — Párrafo 1", multiline: true, value: "Sabemos que una propiedad es mucho más que metros cuadrados; es una inversión y, muchas veces, el esfuerzo de toda una vida. En nuestra inmobiliaria, combinamos nuestra amplia trayectoria en el sector con un análisis profundo de los indicadores económicos actuales de la ciudad." },
   tasacion_intro_p2:         { page: "tasacion", label: "Intro — Párrafo 2", multiline: true, value: "" },
   tasacion_intro_cta:        { page: "tasacion", label: "Intro — Llamada a la acción", multiline: false, value: "Solicite su entrevista." },
+  tasacion_contacto_nota:    { page: "tasacion", label: "Intro — Nota de contacto", multiline: false, value: "Lo contactamos a la brevedad" },
+  tasacion_incluye_titulo:   { page: "tasacion", label: "Incluye — Título del box", multiline: false, value: "¿Qué incluye la tasación?" },
+  tasacion_incluye_1:        { page: "tasacion", label: "Incluye — Ítem 1", multiline: false, value: "Informes técnicos detallados" },
+  tasacion_incluye_2:        { page: "tasacion", label: "Incluye — Ítem 2", multiline: false, value: "Análisis comparativo de mercado (ACM) actualizado" },
+  tasacion_incluye_3:        { page: "tasacion", label: "Incluye — Ítem 3", multiline: false, value: "Asesoramiento basado en los índices de realidad local" },
+  tasacion_incluye_nota:     { page: "tasacion", label: "Incluye — Nota al pie", multiline: false, value: "La tasación es gratuita y sin compromiso." },
   tasacion_tipos_titulo:     { page: "tasacion", label: "Tipos — Título", multiline: false, value: "Qué tipos de propiedades tasamos" },
+  tasacion_tipos_eyebrow:    { page: "tasacion", label: "Tipos — Etiqueta superior", multiline: false, value: "Coberturas" },
+  tasacion_tipo1_titulo:     { page: "tasacion", label: "Tipos — Tipo 1 Título", multiline: false, value: "Viviendas" },
+  tasacion_tipo1_desc:       { page: "tasacion", label: "Tipos — Tipo 1 Descripción", multiline: false, value: "Casas, departamentos, dúplex y PH en toda la región de Santa Fe." },
+  tasacion_tipo2_titulo:     { page: "tasacion", label: "Tipos — Tipo 2 Título", multiline: false, value: "Comerciales" },
+  tasacion_tipo2_desc:       { page: "tasacion", label: "Tipos — Tipo 2 Descripción", multiline: false, value: "Locales, oficinas, depósitos y propiedades de uso mixto." },
+  tasacion_tipo3_titulo:     { page: "tasacion", label: "Tipos — Tipo 3 Título", multiline: false, value: "Terrenos" },
+  tasacion_tipo3_desc:       { page: "tasacion", label: "Tipos — Tipo 3 Descripción", multiline: false, value: "Lotes urbanos, suburbanos y rurales con análisis de potencial constructivo." },
+  tasacion_tipo4_titulo:     { page: "tasacion", label: "Tipos — Tipo 4 Título", multiline: false, value: "Pericias judiciales" },
+  tasacion_tipo4_desc:       { page: "tasacion", label: "Tipos — Tipo 4 Descripción", multiline: false, value: "Informes periciales para procesos sucesorios, divorcios o litigios." },
   tasacion_proceso_titulo:   { page: "tasacion", label: "Proceso — Título", multiline: false, value: "Cómo funciona" },
+  tasacion_proceso_eyebrow:  { page: "tasacion", label: "Proceso — Etiqueta superior", multiline: false, value: "El proceso" },
+  tasacion_paso1_titulo:     { page: "tasacion", label: "Proceso — Paso 1 Título", multiline: false, value: "Solicitá tu tasación" },
+  tasacion_paso1_desc:       { page: "tasacion", label: "Proceso — Paso 1 Descripción", multiline: false, value: "Completá el formulario o comunicate con nosotros. Te contactamos en menos de 24 horas." },
+  tasacion_paso2_titulo:     { page: "tasacion", label: "Proceso — Paso 2 Título", multiline: false, value: "Visita al inmueble" },
+  tasacion_paso2_desc:       { page: "tasacion", label: "Proceso — Paso 2 Descripción", multiline: false, value: "Un profesional visita la propiedad para relevar sus características, estado y entorno." },
+  tasacion_paso3_titulo:     { page: "tasacion", label: "Proceso — Paso 3 Título", multiline: false, value: "Análisis de mercado" },
+  tasacion_paso3_desc:       { page: "tasacion", label: "Proceso — Paso 3 Descripción", multiline: false, value: "Comparamos con propiedades similares vendidas recientemente en la zona para determinar el valor real." },
+  tasacion_paso4_titulo:     { page: "tasacion", label: "Proceso — Paso 4 Título", multiline: false, value: "Informe detallado" },
+  tasacion_paso4_desc:       { page: "tasacion", label: "Proceso — Paso 4 Descripción", multiline: false, value: "Recibís un informe completo con la valoración y los fundamentos que la respaldan." },
   tasacion_form_titulo:      { page: "tasacion", label: "Formulario — Título", multiline: false, value: "Tasá tu propiedad\nsin costo" },
   tasacion_form_subtitulo:   { page: "tasacion", label: "Formulario — Subtítulo", multiline: true, value: "Completá el formulario y uno de nuestros asesores se pondrá en contacto con vos dentro de las próximas 24 horas." },
+  tasacion_form_eyebrow:     { page: "tasacion", label: "Formulario — Etiqueta superior", multiline: false, value: "Solicitá ahora" },
   
   // ADMINISTRACIÓN DE CONSORCIOS
   consorcios_hero_titulo:    { page: "consorcios", label: "Hero — Título", multiline: false, value: "Administración de Consorcios" },
@@ -73,6 +100,18 @@ export async function getContent(key: string, fallback?: string): Promise<string
     return fallback ?? CONTENT_DEFAULTS[key]?.value ?? "";
   } catch {
     return fallback ?? CONTENT_DEFAULTS[key]?.value ?? "";
+  }
+}
+
+// Devuelve múltiples bloques en una sola query (más eficiente para páginas con muchos bloques)
+export async function getContentBatch(keys: string[]): Promise<Record<string, string>> {
+  try {
+    const blocks = await prisma.contentBlock.findMany({ where: { key: { in: keys } } });
+    const map: Record<string, string> = {};
+    blocks.forEach((b) => { map[b.key] = b.value; });
+    return Object.fromEntries(keys.map((k) => [k, map[k] ?? CONTENT_DEFAULTS[k]?.value ?? ""]));
+  } catch {
+    return Object.fromEntries(keys.map((k) => [k, CONTENT_DEFAULTS[k]?.value ?? ""]));
   }
 }
 

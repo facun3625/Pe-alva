@@ -14,7 +14,7 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { getSession } from "@/lib/auth";
 import { getSiteConfig } from "@/lib/config";
-import { getContent } from "@/lib/content";
+import { getContentBatch } from "@/lib/content";
 import TasacionForm from "@/components/TasacionForm";
 
 export const metadata = {
@@ -23,78 +23,49 @@ export const metadata = {
     "Tasaciones profesionales y precisas para conocer el valor real de tu propiedad en Santa Fe, Argentina.",
 };
 
-const STEPS = [
-  {
-    number: "01",
-    title: "Solicitá tu tasación",
-    description:
-      "Completá el formulario o comunicate con nosotros. Te contactamos en menos de 24 horas.",
-  },
-  {
-    number: "02",
-    title: "Visita al inmueble",
-    description:
-      "Un profesional visita la propiedad para relevar sus características, estado y entorno.",
-  },
-  {
-    number: "03",
-    title: "Análisis de mercado",
-    description:
-      "Comparamos con propiedades similares vendidas recientemente en la zona para determinar el valor real.",
-  },
-  {
-    number: "04",
-    title: "Informe detallado",
-    description:
-      "Recibís un informe completo con la valoración y los fundamentos que la respaldan.",
-  },
-];
+const TYPE_ICONS = [Home, BarChart2, FileText, ShieldCheck];
 
-const INCLUDES = [
-  "Informes técnicos detallados",
-  "Análisis comparativo de mercado (ACM) actualizado",
-  "Asesoramiento basado en los índices de realidad local",
-];
-
-const TYPES = [
-  {
-    icon: Home,
-    title: "Viviendas",
-    description: "Casas, departamentos, dúplex y PH en toda la región de Santa Fe.",
-  },
-  {
-    icon: BarChart2,
-    title: "Comerciales",
-    description: "Locales, oficinas, depósitos y propiedades de uso mixto.",
-  },
-  {
-    icon: FileText,
-    title: "Terrenos",
-    description: "Lotes urbanos, suburbanos y rurales con análisis de potencial constructivo.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Pericias judiciales",
-    description: "Informes periciales para procesos sucesorios, divorcios o litigios.",
-  },
+const TASACION_KEYS = [
+  "tasacion_hero_titulo", "tasacion_hero_subtitulo", "tasacion_hero_img", "tasacion_hero_eyebrow",
+  "tasacion_intro_titulo", "tasacion_intro_eyebrow", "tasacion_intro_p1", "tasacion_intro_p2",
+  "tasacion_intro_cta", "tasacion_contacto_nota",
+  "tasacion_incluye_titulo", "tasacion_incluye_1", "tasacion_incluye_2", "tasacion_incluye_3", "tasacion_incluye_nota",
+  "tasacion_tipos_titulo", "tasacion_tipos_eyebrow",
+  "tasacion_tipo1_titulo", "tasacion_tipo1_desc",
+  "tasacion_tipo2_titulo", "tasacion_tipo2_desc",
+  "tasacion_tipo3_titulo", "tasacion_tipo3_desc",
+  "tasacion_tipo4_titulo", "tasacion_tipo4_desc",
+  "tasacion_proceso_titulo", "tasacion_proceso_eyebrow",
+  "tasacion_paso1_titulo", "tasacion_paso1_desc",
+  "tasacion_paso2_titulo", "tasacion_paso2_desc",
+  "tasacion_paso3_titulo", "tasacion_paso3_desc",
+  "tasacion_paso4_titulo", "tasacion_paso4_desc",
+  "tasacion_form_titulo", "tasacion_form_subtitulo", "tasacion_form_eyebrow",
 ];
 
 export default async function TasacionPage() {
-  const [session, siteConfig, heroTitulo, heroSubtitulo, heroImg, introTitulo, introP1, introP2, introCta, tiposTitulo, procesoTitulo, formTitulo, formSubtitulo] = await Promise.all([
+  const [session, siteConfig, c] = await Promise.all([
     getSession(),
     getSiteConfig(),
-    getContent("tasacion_hero_titulo"),
-    getContent("tasacion_hero_subtitulo"),
-    getContent("tasacion_hero_img"),
-    getContent("tasacion_intro_titulo"),
-    getContent("tasacion_intro_p1"),
-    getContent("tasacion_intro_p2"),
-    getContent("tasacion_intro_cta"),
-    getContent("tasacion_tipos_titulo"),
-    getContent("tasacion_proceso_titulo"),
-    getContent("tasacion_form_titulo"),
-    getContent("tasacion_form_subtitulo"),
+    getContentBatch(TASACION_KEYS),
   ]);
+
+  const STEPS = [
+    { number: "01", title: c.tasacion_paso1_titulo, description: c.tasacion_paso1_desc },
+    { number: "02", title: c.tasacion_paso2_titulo, description: c.tasacion_paso2_desc },
+    { number: "03", title: c.tasacion_paso3_titulo, description: c.tasacion_paso3_desc },
+    { number: "04", title: c.tasacion_paso4_titulo, description: c.tasacion_paso4_desc },
+  ];
+
+  const INCLUDES = [c.tasacion_incluye_1, c.tasacion_incluye_2, c.tasacion_incluye_3];
+
+  const TYPES = [
+    { icon: TYPE_ICONS[0], title: c.tasacion_tipo1_titulo, description: c.tasacion_tipo1_desc },
+    { icon: TYPE_ICONS[1], title: c.tasacion_tipo2_titulo, description: c.tasacion_tipo2_desc },
+    { icon: TYPE_ICONS[2], title: c.tasacion_tipo3_titulo, description: c.tasacion_tipo3_desc },
+    { icon: TYPE_ICONS[3], title: c.tasacion_tipo4_titulo, description: c.tasacion_tipo4_desc },
+  ];
+
   return (
     <div className="flex flex-col min-h-screen bg-white text-[#111]">
 
@@ -103,7 +74,7 @@ export default async function TasacionPage() {
       {/* ── HERO ── */}
       <section className="relative h-[320px] overflow-hidden">
         <img
-          src={heroImg}
+          src={c.tasacion_hero_img}
           alt="Tasación de propiedades"
           className="w-full h-full object-cover"
         />
@@ -111,15 +82,15 @@ export default async function TasacionPage() {
         <div className="absolute inset-0 flex items-center px-8 md:px-16 lg:px-24">
           <div>
             <p className="text-brand-orange text-[10px] uppercase tracking-[0.4em] font-semibold mb-3">
-              Servicios
+              {c.tasacion_hero_eyebrow}
             </p>
             <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight">
-              {heroTitulo.split("\n").map((line: string, i: number, arr: string[]) => (
+              {c.tasacion_hero_titulo.split("\n").map((line: string, i: number, arr: string[]) => (
                 <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
               ))}
             </h1>
             <p className="mt-3 text-white/50 text-[14px] max-w-md leading-relaxed">
-              {heroSubtitulo}
+              {c.tasacion_hero_subtitulo}
             </p>
           </div>
         </div>
@@ -132,27 +103,27 @@ export default async function TasacionPage() {
 
             <div>
               <p className="text-brand-orange text-[10px] uppercase tracking-[0.4em] font-semibold mb-3">
-                Tasación profesional
+                {c.tasacion_intro_eyebrow}
               </p>
               <h2 className="text-3xl md:text-[32px] font-bold text-[#111] mb-6 leading-tight">
-                {introTitulo}
+                {c.tasacion_intro_titulo}
               </h2>
               <div className="space-y-4 text-[15px] text-gray-600 leading-relaxed">
-                <p>{introP1}</p>
-                <p>{introP2}</p>
-                <p className="text-brand-orange font-semibold">{introCta}</p>
+                <p>{c.tasacion_intro_p1}</p>
+                {c.tasacion_intro_p2 && <p>{c.tasacion_intro_p2}</p>}
+                <p className="text-brand-orange font-semibold">{c.tasacion_intro_cta}</p>
               </div>
 
               <div className="mt-8 flex items-center gap-3 text-[13px] text-gray-500">
                 <Clock size={15} className="text-brand-orange shrink-0" />
-                <span>Lo contactamos a la brevedad</span>
+                <span>{c.tasacion_contacto_nota}</span>
               </div>
             </div>
 
             <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100">
-              <h3 className="font-bold text-[#111] text-[16px] mb-6">¿Qué incluye la tasación?</h3>
+              <h3 className="font-bold text-[#111] text-[16px] mb-6">{c.tasacion_incluye_titulo}</h3>
               <ul className="space-y-3.5">
-                {INCLUDES.map((item) => (
+                {INCLUDES.filter(Boolean).map((item) => (
                   <li key={item} className="flex items-start gap-3">
                     <CheckCircle size={16} className="text-brand-orange shrink-0 mt-0.5" />
                     <span className="text-[14px] text-gray-600">{item}</span>
@@ -161,7 +132,7 @@ export default async function TasacionPage() {
               </ul>
               <div className="mt-8 pt-6 border-t border-gray-100">
                 <p className="text-[13px] text-gray-400 text-center">
-                  La tasación es <strong className="text-brand-orange">gratuita y sin compromiso</strong>.
+                  {c.tasacion_incluye_nota}
                 </p>
               </div>
             </div>
@@ -175,10 +146,10 @@ export default async function TasacionPage() {
         <div className="max-w-7xl mx-auto px-8 md:px-12 lg:px-16">
           <div className="text-center mb-14">
             <p className="text-brand-orange text-[10px] uppercase tracking-[0.4em] font-semibold mb-3">
-              Coberturas
+              {c.tasacion_tipos_eyebrow}
             </p>
             <h2 className="text-3xl md:text-[32px] font-bold text-[#111]">
-              {tiposTitulo}
+              {c.tasacion_tipos_titulo}
             </h2>
           </div>
 
@@ -207,15 +178,15 @@ export default async function TasacionPage() {
         <div className="max-w-7xl mx-auto px-8 md:px-12 lg:px-16">
           <div className="text-center mb-14">
             <p className="text-brand-orange text-[10px] uppercase tracking-[0.4em] font-semibold mb-3">
-              El proceso
+              {c.tasacion_proceso_eyebrow}
             </p>
             <h2 className="text-3xl md:text-[32px] font-bold text-white">
-              {procesoTitulo}
+              {c.tasacion_proceso_titulo}
             </h2>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {STEPS.map((step, i) => (
+            {STEPS.map((step) => (
               <div key={step.number} className="relative">
                 <div className="bg-white/5 rounded-xl p-7 h-full border border-white/[0.07] relative">
                   <div className="text-4xl font-bold text-brand-orange/30 mb-4 leading-none">{step.number}</div>
@@ -235,15 +206,15 @@ export default async function TasacionPage() {
 
             <div>
               <p className="text-brand-orange text-[10px] uppercase tracking-[0.4em] font-semibold mb-3">
-                Solicitá ahora
+                {c.tasacion_form_eyebrow}
               </p>
               <h2 className="text-3xl md:text-[32px] font-bold text-[#111] mb-4 leading-tight">
-                {formTitulo.split("\n").map((line: string, i: number, arr: string[]) => (
+                {c.tasacion_form_titulo.split("\n").map((line: string, i: number, arr: string[]) => (
                   <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
                 ))}
               </h2>
               <p className="text-gray-500 text-[15px] leading-relaxed mb-8">
-                {formSubtitulo}
+                {c.tasacion_form_subtitulo}
               </p>
               <div className="space-y-4 text-[14px] text-gray-500">
                 <div className="flex items-center gap-3">

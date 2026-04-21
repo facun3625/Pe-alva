@@ -27,7 +27,7 @@ export default function ChatWidget() {
 
   if (pathname?.startsWith("/admin")) return null;
   const bottomRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   const hasInteracted = messages.length > 1;
 
   useEffect(() => {
@@ -47,6 +47,7 @@ export default function ChatWidget() {
     const msg = (text ?? input).trim();
     if (!msg || loading) return;
     setInput("");
+    if (inputRef.current) { inputRef.current.style.height = "auto"; }
     setTooltipVisible(false);
 
     const next: Message[] = [...messages, { role: "user", content: msg }];
@@ -181,15 +182,20 @@ export default function ChatWidget() {
           )}
 
           {/* Input */}
-          <div className="flex items-center gap-2 px-3 py-3" style={{ borderTop: "1px solid #2e2c2a" }}>
-            <input
+          <div className="flex items-end gap-2 px-3 py-3" style={{ borderTop: "1px solid #2e2c2a" }}>
+            <textarea
               ref={inputRef}
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              rows={1}
+              onChange={(e) => {
+                setInput(e.target.value);
+                e.target.style.height = "auto";
+                e.target.style.height = Math.min(e.target.scrollHeight, 120) + "px";
+              }}
               onKeyDown={handleKey}
               placeholder="Escribí tu consulta…"
-              className="flex-1 rounded-lg px-3 py-2 text-[13px] outline-none"
-              style={{ background: "#2e2c2a", color: "#e5e0db", border: "1px solid #3a3836" }}
+              className="flex-1 rounded-lg px-3 py-2 text-[13px] outline-none resize-none overflow-y-auto leading-relaxed"
+              style={{ background: "#2e2c2a", color: "#e5e0db", border: "1px solid #3a3836", maxHeight: 120 }}
               disabled={loading}
             />
             <button
