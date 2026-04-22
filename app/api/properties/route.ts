@@ -8,11 +8,14 @@ export async function GET(req: Request) {
         const { searchParams } = new URL(req.url);
         const ids = searchParams.get("ids");
         const where = ids ? { id: { in: ids.split(",") } } : {};
-        const properties = await prisma.property.findMany({
-            where,
-            orderBy: { createdAt: "desc" },
-        });
-        return NextResponse.json(properties);
+        const [properties, opTypes] = await Promise.all([
+            prisma.property.findMany({ where, orderBy: { createdAt: "desc" } }),
+            prisma.operationType.findMany(),
+        ]);
+        const colorMap: Record<string, string> = {};
+        opTypes.forEach((o) => { colorMap[o.name] = o.color; });
+        const enriched = properties.map((p) => ({ ...p, typeColor: colorMap[p.type] ?? "#df691a" }));
+        return NextResponse.json(enriched);
     } catch (error) {
         console.error("GET Properties Error:", error);
         return NextResponse.json({ error: "Error fetching properties" }, { status: 500 });

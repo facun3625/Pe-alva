@@ -15,6 +15,7 @@ interface Property {
   address: string;
   imageUrl?: string | null;
   type: string;
+  typeColor?: string;
   propertyType: string;
   bedrooms?: number | null;
   bathrooms?: number | null;
@@ -76,7 +77,7 @@ export default function FavoritosContent() {
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
               <div className="absolute top-3 left-3">
-                <span className="bg-brand-orange text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded">
+                <span className="text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded" style={{ background: property.typeColor ?? "#df691a" }}>
                   {property.type}
                 </span>
               </div>

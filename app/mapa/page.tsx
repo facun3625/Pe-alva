@@ -27,7 +27,7 @@ export default async function MapaPage({ searchParams }: Props) {
     if (!isNaN(n)) where.bedrooms = n === 5 ? { gte: 5 } : n;
   }
 
-  const [properties, operations, cities, propertyTypes, session, siteConfig] = await Promise.all([
+  const [rawProperties, operations, cities, propertyTypes, session, siteConfig] = await Promise.all([
     prisma.property.findMany({ where, orderBy: { createdAt: "desc" } }),
     prisma.operationType.findMany({ orderBy: { order: "asc" } }),
     prisma.city.findMany({ orderBy: { order: "asc" } }),
@@ -35,6 +35,10 @@ export default async function MapaPage({ searchParams }: Props) {
     getSession(),
     getSiteConfig(),
   ]);
+
+  const colorMap: Record<string, string> = {};
+  operations.forEach((o) => { colorMap[o.name] = o.color; });
+  const properties = rawProperties.map((p) => ({ ...p, typeColor: colorMap[p.type] ?? "#df691a" }));
 
   return (
     <div className="flex flex-col min-h-screen bg-white text-[#111]">

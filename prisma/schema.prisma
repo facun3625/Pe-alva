@@ -12,6 +12,7 @@ model OperationType {
   name      String  @unique
   order     Int     @default(0)
   whatsapp  String?
+  color     String  @default("#df691a")
 }
 
 model City {

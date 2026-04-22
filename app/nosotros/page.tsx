@@ -14,7 +14,7 @@ import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { getSession } from "@/lib/auth";
 import { getSiteConfig } from "@/lib/config";
-import { getContent } from "@/lib/content";
+import { getContentBatch } from "@/lib/content";
 
 export const metadata = {
   title: "Nosotros — Penalva Inmobiliaria",
@@ -22,82 +22,66 @@ export const metadata = {
     "Más de 20 años de trayectoria en compra, venta y alquiler de propiedades en Santa Fe, Argentina.",
 };
 
-const VALUES = [
-  {
-    icon: Shield,
-    title: "Responsabilidad",
-    description:
-      "Actuamos con plena responsabilidad en cada operación, protegiendo los intereses de nuestros clientes en todo momento.",
-  },
-  {
-    icon: Handshake,
-    title: "Honestidad",
-    description:
-      "La transparencia y la honestidad son la base de cada una de nuestras relaciones comerciales y personales.",
-  },
-  {
-    icon: Award,
-    title: "Cumplimiento",
-    description:
-      "Cumplimos nuestros compromisos con precisión y puntualidad, garantizando resultados concretos y verificables.",
-  },
-  {
-    icon: TrendingUp,
-    title: "Trayectoria",
-    description:
-      "Más de dos décadas en el mercado inmobiliario de Santa Fe nos avalan como referentes del sector.",
-  },
-];
+const VALUE_ICONS = [Shield, Handshake, Award, TrendingUp];
 
-const STATS = [
-  { value: "20+", label: "Años de experiencia" },
-  { value: "500+", label: "Propiedades gestionadas" },
-  { value: "300+", label: "Clientes satisfechos" },
-  { value: "3", label: "Ciudades atendidas" },
-];
-
-const MEMBERSHIPS = [
-  { name: "FIRA", description: "Federación Inmobiliaria de la República Argentina" },
-  { name: "CCI", description: "Cámara de Comercio e Industria de Santa Fe" },
-  { name: "CECI", description: "Centro de Corredores Inmobiliarios" },
-];
-
-const TEAM = [
-  {
-    name: "Marcelo Penalva",
-    role: "Director General",
-    description: "Más de 20 años liderando el equipo y garantizando la excelencia en cada operación.",
-  },
-  {
-    name: "Equipo Comercial",
-    role: "Asesores de Ventas",
-    description: "Profesionales especializados en compra y venta de propiedades residenciales y comerciales.",
-  },
-  {
-    name: "Área Legal",
-    role: "Asesoría Jurídica",
-    description: "Respaldo legal completo en escrituraciones, contratos y trámites administrativos.",
-  },
+const NOSOTROS_KEYS = [
+  "nosotros_hero_titulo", "nosotros_hero_subtitulo", "nosotros_hero_img", "nosotros_hero_eyebrow",
+  "nosotros_empresa_titulo", "nosotros_empresa_eyebrow", "nosotros_empresa_img",
+  "nosotros_empresa_p1", "nosotros_empresa_p2", "nosotros_empresa_p3", "nosotros_empresa_quote",
+  "nosotros_horario", "nosotros_badge_valor", "nosotros_badge_label",
+  "nosotros_stat1_valor", "nosotros_stat1_label",
+  "nosotros_stat2_valor", "nosotros_stat2_label",
+  "nosotros_stat3_valor", "nosotros_stat3_label",
+  "nosotros_stat4_valor", "nosotros_stat4_label",
+  "nosotros_valores_titulo", "nosotros_valores_eyebrow",
+  "nosotros_valor1_titulo", "nosotros_valor1_desc",
+  "nosotros_valor2_titulo", "nosotros_valor2_desc",
+  "nosotros_valor3_titulo", "nosotros_valor3_desc",
+  "nosotros_valor4_titulo", "nosotros_valor4_desc",
+  "nosotros_equipo_titulo", "nosotros_equipo_eyebrow",
+  "nosotros_miembro1_nombre", "nosotros_miembro1_rol", "nosotros_miembro1_desc",
+  "nosotros_miembro2_nombre", "nosotros_miembro2_rol", "nosotros_miembro2_desc",
+  "nosotros_miembro3_nombre", "nosotros_miembro3_rol", "nosotros_miembro3_desc",
+  "nosotros_membresias_eyebrow",
+  "nosotros_membresia1_nombre", "nosotros_membresia1_desc",
+  "nosotros_membresia2_nombre", "nosotros_membresia2_desc",
+  "nosotros_membresia3_nombre", "nosotros_membresia3_desc",
+  "nosotros_contacto_eyebrow", "nosotros_contacto_titulo", "nosotros_contacto_texto", "nosotros_contacto_email_cta",
 ];
 
 export default async function NosotrosPage() {
-  const [session, siteConfig, heroTitulo, heroSubtitulo, heroImg, empresaImg, empresaTitulo, empresaP1, empresaP2, empresaP3, empresaQuote, horario, valoresTitulo, equipoTitulo, contactoTexto] = await Promise.all([
+  const [session, siteConfig, c] = await Promise.all([
     getSession(),
     getSiteConfig(),
-    getContent("nosotros_hero_titulo"),
-    getContent("nosotros_hero_subtitulo"),
-    getContent("nosotros_hero_img"),
-    getContent("nosotros_empresa_img"),
-    getContent("nosotros_empresa_titulo"),
-    getContent("nosotros_empresa_p1"),
-    getContent("nosotros_empresa_p2"),
-    getContent("nosotros_empresa_p3"),
-    getContent("nosotros_empresa_quote"),
-    getContent("nosotros_horario"),
-    getContent("nosotros_valores_titulo"),
-    getContent("nosotros_equipo_titulo"),
-    getContent("nosotros_contacto_texto"),
+    getContentBatch(NOSOTROS_KEYS),
   ]);
+
+  const STATS = [
+    { value: c.nosotros_stat1_valor, label: c.nosotros_stat1_label },
+    { value: c.nosotros_stat2_valor, label: c.nosotros_stat2_label },
+    { value: c.nosotros_stat3_valor, label: c.nosotros_stat3_label },
+    { value: c.nosotros_stat4_valor, label: c.nosotros_stat4_label },
+  ];
+
+  const VALUES = [
+    { icon: VALUE_ICONS[0], title: c.nosotros_valor1_titulo, description: c.nosotros_valor1_desc },
+    { icon: VALUE_ICONS[1], title: c.nosotros_valor2_titulo, description: c.nosotros_valor2_desc },
+    { icon: VALUE_ICONS[2], title: c.nosotros_valor3_titulo, description: c.nosotros_valor3_desc },
+    { icon: VALUE_ICONS[3], title: c.nosotros_valor4_titulo, description: c.nosotros_valor4_desc },
+  ];
+
+  const TEAM = [
+    { name: c.nosotros_miembro1_nombre, role: c.nosotros_miembro1_rol, description: c.nosotros_miembro1_desc },
+    { name: c.nosotros_miembro2_nombre, role: c.nosotros_miembro2_rol, description: c.nosotros_miembro2_desc },
+    { name: c.nosotros_miembro3_nombre, role: c.nosotros_miembro3_rol, description: c.nosotros_miembro3_desc },
+  ];
+
+  const MEMBERSHIPS = [
+    { name: c.nosotros_membresia1_nombre, description: c.nosotros_membresia1_desc },
+    { name: c.nosotros_membresia2_nombre, description: c.nosotros_membresia2_desc },
+    { name: c.nosotros_membresia3_nombre, description: c.nosotros_membresia3_desc },
+  ];
+
   return (
     <div className="flex flex-col min-h-screen bg-white text-[#111]">
 
@@ -106,7 +90,7 @@ export default async function NosotrosPage() {
       {/* ── HERO ── */}
       <section className="relative h-[320px] overflow-hidden">
         <img
-          src={heroImg}
+          src={c.nosotros_hero_img}
           alt="Oficina Penalva"
           className="w-full h-full object-cover"
         />
@@ -114,13 +98,13 @@ export default async function NosotrosPage() {
         <div className="absolute inset-0 flex items-center px-8 md:px-16 lg:px-24">
           <div>
             <p className="text-brand-orange text-[10px] uppercase tracking-[0.4em] font-semibold mb-3">
-              La Empresa
+              {c.nosotros_hero_eyebrow}
             </p>
             <h1 className="text-4xl md:text-5xl font-bold text-white leading-tight">
-              {heroTitulo}
+              {c.nosotros_hero_titulo}
             </h1>
             <p className="mt-3 text-white/50 text-[14px] max-w-md leading-relaxed">
-              {heroSubtitulo}
+              {c.nosotros_hero_subtitulo}
             </p>
           </div>
         </div>
@@ -154,35 +138,37 @@ export default async function NosotrosPage() {
 
             <div>
               <p className="text-brand-orange text-[10px] uppercase tracking-[0.4em] font-semibold mb-3">
-                Quiénes somos
+                {c.nosotros_empresa_eyebrow}
               </p>
               <h2 className="text-3xl md:text-[32px] font-bold text-[#111] mb-6 leading-tight">
-                {empresaTitulo.split("\n").map((line: string, i: number) => (
-                  <span key={i}>{line}{i < empresaTitulo.split("\n").length - 1 && <br />}</span>
+                {c.nosotros_empresa_titulo.split("\n").map((line: string, i: number, arr: string[]) => (
+                  <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
                 ))}
               </h2>
               <div className="space-y-4 text-[15px] text-gray-600 leading-relaxed">
-                <p>{empresaP1}</p>
-                <p>{empresaP2}</p>
-                <p>{empresaP3}</p>
-                <p className="text-brand-orange font-semibold italic">{empresaQuote}</p>
+                <p>{c.nosotros_empresa_p1}</p>
+                {c.nosotros_empresa_p2 && <p>{c.nosotros_empresa_p2}</p>}
+                {c.nosotros_empresa_p3 && <p>{c.nosotros_empresa_p3}</p>}
+                {c.nosotros_empresa_quote && (
+                  <p className="text-brand-orange font-semibold italic">{c.nosotros_empresa_quote}</p>
+                )}
               </div>
 
               <div className="mt-8 flex items-center gap-3 text-[13px] text-gray-500">
                 <Clock size={15} className="text-brand-orange shrink-0" />
-                <span>{horario}</span>
+                <span>{c.nosotros_horario}</span>
               </div>
             </div>
 
             <div className="relative">
               <img
-                src={empresaImg}
+                src={c.nosotros_empresa_img}
                 alt="Oficina Penalva"
                 className="w-full h-[420px] object-cover rounded-2xl shadow-xl"
               />
               <div className="absolute -bottom-6 -left-6 bg-brand-orange text-white p-6 rounded-xl shadow-lg">
-                <div className="text-3xl font-bold">20+</div>
-                <div className="text-[11px] uppercase tracking-widest text-white/70 mt-0.5">Años de experiencia</div>
+                <div className="text-3xl font-bold">{c.nosotros_badge_valor}</div>
+                <div className="text-[11px] uppercase tracking-widest text-white/70 mt-0.5">{c.nosotros_badge_label}</div>
               </div>
             </div>
 
@@ -195,10 +181,10 @@ export default async function NosotrosPage() {
         <div className="max-w-7xl mx-auto px-8 md:px-12 lg:px-16">
           <div className="text-center mb-14">
             <p className="text-brand-orange text-[10px] uppercase tracking-[0.4em] font-semibold mb-3">
-              Nuestros pilares
+              {c.nosotros_valores_eyebrow}
             </p>
             <h2 className="text-3xl md:text-[32px] font-bold text-[#111]">
-              {valoresTitulo}
+              {c.nosotros_valores_titulo}
             </h2>
           </div>
 
@@ -227,10 +213,10 @@ export default async function NosotrosPage() {
         <div className="max-w-7xl mx-auto px-8 md:px-12 lg:px-16">
           <div className="mb-14">
             <p className="text-brand-orange text-[10px] uppercase tracking-[0.4em] font-semibold mb-3">
-              Staff
+              {c.nosotros_equipo_eyebrow}
             </p>
             <h2 className="text-3xl md:text-[32px] font-bold text-[#111]">
-              {equipoTitulo}
+              {c.nosotros_equipo_titulo}
             </h2>
           </div>
 
@@ -253,7 +239,7 @@ export default async function NosotrosPage() {
       <section className="py-16 bg-[#262522]">
         <div className="max-w-7xl mx-auto px-8 md:px-12 lg:px-16">
           <p className="text-center text-white/30 text-[10px] uppercase tracking-[0.4em] font-semibold mb-10">
-            Somos miembros de
+            {c.nosotros_membresias_eyebrow}
           </p>
           <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
             {MEMBERSHIPS.map((m) => (
@@ -270,13 +256,13 @@ export default async function NosotrosPage() {
       <section className="py-20 bg-white">
         <div className="max-w-3xl mx-auto px-8 text-center">
           <p className="text-brand-orange text-[10px] uppercase tracking-[0.4em] font-semibold mb-3">
-            Contacto
+            {c.nosotros_contacto_eyebrow}
           </p>
           <h2 className="text-3xl md:text-[32px] font-bold text-[#111] mb-4">
-            ¿Hablamos?
+            {c.nosotros_contacto_titulo}
           </h2>
           <p className="text-gray-500 text-[15px] leading-relaxed mb-10">
-            {contactoTexto}
+            {c.nosotros_contacto_texto}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
@@ -291,7 +277,7 @@ export default async function NosotrosPage() {
               className="flex items-center gap-2.5 bg-[#f0efed] text-[#111] font-bold text-[13px] uppercase tracking-wider px-8 py-4 rounded-lg hover:bg-gray-200 transition-colors"
             >
               <Mail size={15} />
-              Enviar email
+              {c.nosotros_contacto_email_cta}
             </a>
           </div>
           <div className="mt-8 flex items-center justify-center gap-2 text-[13px] text-gray-400">

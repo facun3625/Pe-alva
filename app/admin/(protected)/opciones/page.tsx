@@ -74,15 +74,43 @@ function TagList({ title, endpoint }: { title: string; endpoint: string }) {
 }
 
 // ─── Lista especial para operaciones con campo WhatsApp ───────────────────────
+const COLOR_PRESETS = ["#df691a","#2563eb","#16a34a","#9333ea","#dc2626","#0891b2","#d97706","#64748b"];
+
+function ColorPicker({ value, onChange }: { value: string; onChange: (c: string) => void }) {
+  return (
+    <div className="flex items-center gap-2 flex-wrap">
+      {COLOR_PRESETS.map((c) => (
+        <button
+          key={c}
+          type="button"
+          onClick={() => onChange(c)}
+          className="w-6 h-6 rounded-full border-2 transition-transform hover:scale-110"
+          style={{ background: c, borderColor: value === c ? "#111" : "transparent" }}
+        />
+      ))}
+      <input
+        type="color"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-6 h-6 rounded cursor-pointer border border-gray-200"
+        title="Color personalizado"
+      />
+      <span className="text-[11px] text-white font-bold px-2 py-0.5 rounded" style={{ background: value }}>{value}</span>
+    </div>
+  );
+}
+
 function OperationList() {
-  const [items, setItems] = useState<{ id: string; name: string; whatsapp?: string | null }[]>([]);
+  const [items, setItems] = useState<{ id: string; name: string; whatsapp?: string | null; color: string }[]>([]);
   const [newName, setNewName] = useState("");
   const [newWa, setNewWa] = useState("");
+  const [newColor, setNewColor] = useState("#df691a");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editName, setEditName] = useState("");
   const [editWa, setEditWa] = useState("");
+  const [editColor, setEditColor] = useState("#df691a");
 
   const load = () => {
     setLoading(true);
@@ -93,15 +121,15 @@ function OperationList() {
   const add = async () => {
     if (!newName.trim()) return;
     setSaving(true);
-    await fetch("/api/operations", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: newName.trim(), whatsapp: newWa.trim() || null }) });
-    setNewName(""); setNewWa(""); setSaving(false); load();
+    await fetch("/api/operations", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: newName.trim(), whatsapp: newWa.trim() || null, color: newColor }) });
+    setNewName(""); setNewWa(""); setNewColor("#df691a"); setSaving(false); load();
   };
 
-  const startEdit = (item: typeof items[0]) => { setEditingId(item.id); setEditName(item.name); setEditWa(item.whatsapp ?? ""); };
+  const startEdit = (item: typeof items[0]) => { setEditingId(item.id); setEditName(item.name); setEditWa(item.whatsapp ?? ""); setEditColor(item.color ?? "#df691a"); };
 
   const confirmEdit = async (id: string) => {
     if (!editName.trim()) { setEditingId(null); return; }
-    await fetch(`/api/operations/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: editName.trim(), whatsapp: editWa.trim() || null }) });
+    await fetch(`/api/operations/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: editName.trim(), whatsapp: editWa.trim() || null, color: editColor }) });
     setEditingId(null); load();
   };
 
@@ -127,6 +155,10 @@ function OperationList() {
             {saving ? <Loader2 size={13} className="animate-spin" /> : <Plus size={13} />} Agregar
           </button>
         </div>
+        <div>
+          <p className="text-[11px] text-gray-400 mb-1.5">Color de la etiqueta</p>
+          <ColorPicker value={newColor} onChange={setNewColor} />
+        </div>
         <p className="text-[11px] text-gray-400">El número de WhatsApp se usará en la ficha de cada propiedad de este tipo.</p>
       </div>
 
@@ -142,15 +174,22 @@ function OperationList() {
                   <button onClick={() => confirmEdit(item.id)} className="text-brand-orange hover:text-orange-700 transition-colors px-2"><Check size={16} /></button>
                   <button onClick={() => setEditingId(null)} className="text-gray-400 hover:text-gray-600 transition-colors px-2"><X size={16} /></button>
                 </div>
+                <div>
+                  <p className="text-[11px] text-gray-500 mb-1.5">Color de la etiqueta</p>
+                  <ColorPicker value={editColor} onChange={setEditColor} />
+                </div>
               </li>
             ) : (
               <li key={item.id} className="flex items-center justify-between px-4 py-3 rounded-lg bg-gray-50 group">
-                <div>
-                  <p className="text-[13px] font-medium text-[#111]">{item.name}</p>
-                  {item.whatsapp
-                    ? <p className="text-[11px] text-gray-400 mt-0.5">WA: {item.whatsapp}</p>
-                    : <p className="text-[11px] text-gray-300 mt-0.5">Sin WhatsApp asignado</p>
-                  }
+                <div className="flex items-center gap-3">
+                  <span className="text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded" style={{ background: item.color ?? "#df691a" }}>{item.name}</span>
+                  <div>
+                    <p className="text-[13px] font-medium text-[#111]">{item.name}</p>
+                    {item.whatsapp
+                      ? <p className="text-[11px] text-gray-400 mt-0.5">WA: {item.whatsapp}</p>
+                      : <p className="text-[11px] text-gray-300 mt-0.5">Sin WhatsApp asignado</p>
+                    }
+                  </div>
                 </div>
                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button onClick={() => startEdit(item)} className="p-1.5 text-gray-400 hover:text-brand-orange transition-colors rounded"><Pencil size={12} /></button>

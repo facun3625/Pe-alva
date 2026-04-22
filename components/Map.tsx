@@ -36,6 +36,7 @@ interface Property {
   city?: string;
   imageUrl?: string | null;
   type?: string;
+  typeColor?: string;
   propertyType?: string;
   bedrooms?: number | null;
 }
@@ -95,7 +96,7 @@ export default function PropertyMap({ properties, fullHeight }: MapProps) {
                     {prop.type && (
                       <span style={{
                         position: "absolute", bottom: 8, left: 8,
-                        background: "#df691a", color: "white",
+                        background: prop.typeColor ?? "#df691a", color: "white",
                         fontSize: 9, fontWeight: 700, letterSpacing: "0.1em",
                         textTransform: "uppercase", padding: "3px 8px", borderRadius: 4,
                       }}>

@@ -30,7 +30,7 @@ export default async function PropiedadesPage({ searchParams }: Props) {
     }
   }
 
-  const [properties, operations, cities, propertyTypes, session, siteConfig] = await Promise.all([
+  const [rawProperties, operations, cities, propertyTypes, session, siteConfig] = await Promise.all([
     prisma.property.findMany({ where, orderBy: { createdAt: "desc" } }),
     prisma.operationType.findMany({ orderBy: { order: "asc" } }),
     prisma.city.findMany({ orderBy: { order: "asc" } }),
@@ -38,6 +38,10 @@ export default async function PropiedadesPage({ searchParams }: Props) {
     getSession(),
     getSiteConfig(),
   ]);
+
+  const colorMap: Record<string, string> = {};
+  operations.forEach((o) => { colorMap[o.name] = o.color; });
+  const properties = rawProperties.map((p) => ({ ...p, typeColor: colorMap[p.type] ?? "#df691a" }));
 
   const hasFilters = !!(ciudad || tipo || operacion || dormitorios);
 
