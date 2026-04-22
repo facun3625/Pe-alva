@@ -6,23 +6,15 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { formatPrice } from "@/lib/formatPrice";
 
-// Marcador naranja personalizado
-const customIcon = L.divIcon({
-  html: `
-    <div style="
-      width: 32px; height: 32px;
-      background: #df691a;
-      border-radius: 50% 50% 50% 0;
-      transform: rotate(-45deg);
-      border: 3px solid white;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.35);
-    "></div>
-  `,
-  iconSize: [32, 32],
-  iconAnchor: [16, 32],
-  popupAnchor: [0, -36],
-  className: "",
-});
+function makeIcon(color: string) {
+  return L.divIcon({
+    html: `<div style="width:32px;height:32px;background:${color};border-radius:50% 50% 50% 0;transform:rotate(-45deg);border:3px solid white;box-shadow:0 3px 10px rgba(0,0,0,0.35);"></div>`,
+    iconSize: [32, 32],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -36],
+    className: "",
+  });
+}
 
 interface Property {
   id: string;
@@ -79,7 +71,7 @@ export default function PropertyMap({ properties, fullHeight }: MapProps) {
             <Marker
               key={prop.id}
               position={[Number(prop.lat), Number(prop.lng)]}
-              icon={customIcon}
+              icon={makeIcon(prop.typeColor ?? "#df691a")}
             >
               <Popup>
                 <div style={{ fontFamily: "var(--font-montserrat), sans-serif" }}>

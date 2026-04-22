@@ -52,7 +52,7 @@ async function getProperties(): Promise<Property[]> {
 }
 
 export default async function Home() {
-  const [properties, operations, cities, propertyTypes, session, siteConfig, heroTitulo, heroSubtitulo, heroImg] = await Promise.all([
+  const [rawProperties, operations, cities, propertyTypes, session, siteConfig, heroTitulo, heroSubtitulo, heroImg] = await Promise.all([
     getProperties(),
     prisma.operationType.findMany({ orderBy: { order: "asc" } }),
     prisma.city.findMany({ orderBy: { order: "asc" } }),
@@ -63,6 +63,10 @@ export default async function Home() {
     getContent("home_subtitulo"),
     getContent("home_hero_img"),
   ]);
+
+  const colorMap: Record<string, string> = {};
+  operations.forEach((o: any) => { colorMap[o.name] = o.color; });
+  const properties = rawProperties.map((p) => ({ ...p, typeColor: colorMap[p.type] ?? "#df691a" }));
 
   return (
     <div className="flex flex-col min-h-screen bg-white text-[#111]">
@@ -156,7 +160,7 @@ export default async function Home() {
 
                     {/* Badge tipo operación */}
                     <div className="absolute top-3 left-3">
-                      <span className="bg-brand-orange text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded">
+                      <span className="text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded" style={{ background: (property as any).typeColor ?? "#df691a" }}>
                         {property.type}
                       </span>
                     </div>
