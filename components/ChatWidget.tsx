@@ -73,10 +73,35 @@ export default function ChatWidget() {
     if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); }
   }
 
-  // Render message with **bold** support
+  // Render message with **bold** and [text](url) link support
   function renderMsg(text: string) {
-    const parts = text.split(/\*\*(.*?)\*\*/g);
-    return parts.map((p, i) => i % 2 === 1 ? <strong key={i}>{p}</strong> : p);
+    const tokens = text.split(/(\[([^\]]+)\]\(([^)]+)\)|\*\*([^*]+)\*\*)/g);
+    const result: React.ReactNode[] = [];
+    let i = 0;
+    while (i < tokens.length) {
+      const t = tokens[i];
+      if (!t) { i++; continue; }
+      if (t.startsWith("[") && t.includes("](")) {
+        const label = tokens[i + 1];
+        const href = tokens[i + 2];
+        result.push(
+          <a key={i} href={href} target="_blank" rel="noopener noreferrer"
+            className="underline font-semibold"
+            style={{ color: "#df691a" }}>
+            {label}
+          </a>
+        );
+        i += 3;
+      } else if (t.startsWith("**") && t.endsWith("**")) {
+        const inner = tokens[i + 1];
+        result.push(<strong key={i}>{inner}</strong>);
+        i += 2;
+      } else {
+        result.push(t);
+        i++;
+      }
+    }
+    return result;
   }
 
   return (

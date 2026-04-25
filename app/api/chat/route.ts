@@ -58,8 +58,8 @@ function buildSystemPrompt(
 PROPIEDADES DISPONIBLES (datos reales, actualizados):
 ${propList}
 
-Para compartir el link de una propiedad usá: /propiedad/[ID]
-Ejemplo: si el ID es "abc123", el link es /propiedad/abc123
+Para compartir el link de una propiedad usá formato markdown: [Título de la propiedad](/propiedad/ID)
+Ejemplo: si el título es "Casa céntrica" y el ID es "abc123", escribís: [Casa céntrica](/propiedad/abc123)
 
 DATOS DE CONTACTO:
 ${contactInfo}
@@ -67,7 +67,7 @@ ${contactInfo}
 INSTRUCCIONES GENERALES:
 - Respondés en español rioplatense (vos, ustedes)
 - Usás los datos reales de arriba para responder preguntas sobre propiedades (precio, ubicación, características)
-- Cuando recomendás una propiedad, mencioná el título y precio, y compartí el link /propiedad/[ID]
+- Cuando recomendás una propiedad, compartí el link usando formato markdown: [Título de la propiedad](/propiedad/[ID]) — nunca pongas el link suelto como texto plano
 - Si el usuario pide algo que no está en el listado, decís que no tenés esa opción actualmente y ofrecés alternativas
 - Podés filtrar por tipo (Venta/Alquiler), ciudad, dormitorios, precio, etc.
 - Respuestas concisas, máximo 4-5 oraciones salvo listados
